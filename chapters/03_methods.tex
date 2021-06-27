@@ -7,6 +7,69 @@
 \section{Extremal Sampling}%
 \label{sec:extremal_sampling}
 
+Since our method relies on sampling outliers in the latent space we will now
+examine how this can be accomplished. The latent space is trained to be
+approximately gaussian in the case of the normalizing flow, so we can look at
+two methods of sampling outliers from a gaussian distribution. Sampling
+outliers in the Deep Archetypal Analysis case will be investigated in the next
+section.
+
+\subsection{Gumbel Distribution}%
+\label{sub:gumbel_distribution}
+
+\begin{figure}[htpb]
+    \centering
+    \includegraphics[width=0.8\linewidth]{figures/gumbel_uni.pdf}
+    \caption{Gumbel distribution}%
+    \label{fig:gumbel_uni}
+\end{figure}
+
+
+\subsection{High-Dimensional Gaussian Distributions}%
+\label{sub:high_dimensional_gaussian_distributions}
+% TODO: Proof?
+Since we are working with high-dimensional data, we can investigate the
+behavior of random vectors in high dimensions.
+Consider the vector $X = (X_1, X_2, \dots, X_d)$ in $\mathbb{R}^d$, where the
+coordinates $X_i$ are independently distributed with zero mean and unit
+variance. The squared length of vector $X$ is
+\begin{equation}%
+    \label{eq:square_norm}
+    \lVert X \rVert_2^2 = \sum_d X_i^2
+\end{equation}
+If we assume the coordinates $X_i$ to be standard normally distributed, the
+length of the vector is distributed according to a chi distribution with
+$d$ degrees of freedom
+\begin{equation}%
+    \label{eq:sq_norm_chi}
+    \lVert X \rVert_2 \sim \chi_d
+\end{equation}
+If the coordinates are distributed with non-unit variance, $X_i \sim
+\mathcal{N}(0, \sigma^2)$, we similarly get
+\begin{equation}%
+    \label{eq:sq_norm_chi_sigma}
+    \lVert X \rVert_2 \sim \sigma\chi_d
+\end{equation}
+
+We can now look at the expected length of the random vector $X$
+\begin{equation}
+    \begin{aligned}%
+        \label{eq:mean_var_sq_dist}
+        \mathbb{E} \lVert X \rVert_2 &= \sqrt{2} \frac{\Gamma(\frac{d +
+        1}{2})}{\Gamma(\frac{d}{2})} \\
+        \mathrm{Var} \lVert X \rVert_2 &= d - (\mathbb{E} \lVert X \rVert_2)^2
+    \end{aligned}
+\end{equation}
+meaning even though the area of highest probability for a high-dimensional
+standard normal distribution is close to the origin, most of the mass will be
+in a thin, hyperspherical shell with radius $\sim \sqrt{d}$.
+
+If we want to sample from a shell around a high-dimensional standard normal
+distribution, we can simply sample coordinates $X_i \sim \mathcal{N}(0,
+\sigma^2)$ and choose $\sigma$ such that a desired radius is reached.
+
+% TODO: Typicality
+
 
 \section{Geometrical Approach}%
 \label{sec:geometrical_approach}
