@@ -370,3 +370,70 @@ be simply calculated as
 
 \section{Archetypal Analysis}%
 \label{sec:archetypal_analysis}
+
+% - classical AA
+% - deep AA
+A common way to represent data by template examples is by using prototypes,
+especially in machine learning. Prototypes are typical examples of their class,
+that ideally entail all properties of their class. An alternative way, first
+proposed by Cutler et al., is to represent data samples as a mixture of
+individuals of pure type or archetypes~\citep{cutlerArchetypalAnalysis1994}. A
+simple way to formulate this representation is by a variant of principal
+components. A data vector $\mathbf{x}_i \in \mathbb{R}^d$ from a dataset of $n$
+samples is represented by coefficients $a_{ij}$ and $m \leq \min(n, d)$
+archetype vectors $\mathbf{z}_j \in \mathbb{R}^d$
+
+% TODO: Those eqs are not correct yet
+\begin{equation}%
+    \label{eq:data_from_archetypes}
+    \mathbf{x}_i = \sum_j a_{ij} \mathbf{z}_j
+\end{equation}
+In turn, the archetypes are computed from the data using coefficients $b_{ji}$
+\begin{equation}%
+    \label{eq:archetypes_from_data}
+    \mathbf{z}_j = \sum_i b_{ji} \mathbf{x}_i
+\end{equation}
+Without further constraints this approach does not fulfill the requirements,
+that the templates are pure archetypes and that $x_i$ are represented as
+mixtures of the archetypes. If we subject the coefficient to the following
+constraints
+\begin{equation}
+    \begin{aligned}%
+        \label{eq:archetype_constraints}
+        a_{ij} \geq 0 &\textrm{ and } \sum_{j=1}^{m} a_{ij} = 1 \\
+        b_{ji} \geq 0 &\textrm{ and } \sum_{i=1}^{n} b_{ji} = 1
+    \end{aligned}   
+\end{equation}
+we obtain the desired representation. The archetypes now represent the data
+convex hull.
+
+Finding the weights $a_ij$ and $b_ij$ can be done by minimizing the square
+error in the representation
+\begin{equation}
+    \begin{aligned}
+        \label{eq:archetype_rss}
+        \min_{a,b} \sum_i \lVert \mathbf{x}_i - \sum_j a_{ij} \mathbf{z}_j
+        \rVert^2 \\
+        = \min_{a,b} \sum_l \lVert \mathbf{x}_l - \sum_j a_{lj} \sum_i
+        b_{ji} \mathbf{x}_i \rVert^2
+    \end{aligned}
+\end{equation}
+Cutler et al. propose an alternating least squares
+algorithm to solve this optimization~\citep{cutlerArchetypalAnalysis1994}.
+Bauckhage et al. introduced a more efficient algorithm based on
+sub-gradients~\citep{bauckhageArchetypalAnalysisAutoencoder2015}, which is also
+used in \textcolor{red}{FIGURE}.
+Keller et al. build on this framework by applying archetypal analysis to the
+latent space of a deep generative
+model~\citep{kellerLearningExtremalRepresentations2020}. In their paper they
+propose using a Deep Variational Information Bottelneck, here we will use a
+normalizing flow instead. The normalizing flow maps data vector $\mathbf{x}_i
+\in \mathbb{R}^d$ to a latent vector $\mathbf{t}_i \in \mathbb{R}^d$ that is
+approximately normally distributed. Additional linear layers map the latent
+vectors to archetype coefficients, the $k$ archetype vectors are initialized to
+be the vertices of a $(k-1)$-simplex, as there is no absolute frame of
+reference for the latent space coordinates. The archetype vectors can be fixed
+when training the flow, or can be allowed to update to accomodate a pretrained
+flow. The full model will be discussed in the next chapter.
+
+% TODO: reformulate with A and B?
