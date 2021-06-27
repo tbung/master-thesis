@@ -1,1 +1,1 @@
-$pdflatex="xelatex %O %S";
+$pdflatex="lualatex %O %S";
