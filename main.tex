@@ -6,12 +6,21 @@
 \usepackage{setspace}
 \usepackage[hidelinks]{hyperref}
 \usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
 \usepackage[rgb]{xcolor}
 \usepackage{tikz}
-\usepackage{biblatex}
+\usetikzlibrary{positioning}
+\usetikzlibrary{calc}
+\usetikzlibrary{arrows.meta}
+\usepackage[style=authoryear,natbib=true]{biblatex}
+\usepackage{caption}
+\usepackage{subcaption}
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 
+
+% Define some pagestyles
 
 \newenvironment{abstractpage}
     {\cleardoublepage\vspace*{\fill}\thispagestyle{empty}}
@@ -37,6 +46,20 @@
     \renewcommand{\footrulewidth}{0pt}
 }
 
+% Colors
+
+% TikZ Styles
+\tikzset{varnode/.style={circle, draw=red!60, fill=red!5, very thick, minimum
+size=12mm}}
+\tikzset{opnode/.style={circle, draw=grey!60, fill=grey!5, very thick, minimum
+size=9mm}}
+\tikzset{connectnode/.style={circle, draw=black!60, fill=grey!60 thick, minimum
+size=2mm}}
+\tikzset{grapharrow/.style={-{>[scale=1]}, thick}}
+
+\newtheorem{definition}{Definition}[section]
+
+% Content starts here
 \bibliography{references}
 
 \begin{document}
