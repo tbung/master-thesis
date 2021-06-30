@@ -132,6 +132,57 @@ leads to a significantly distinct distribution.
 % Sampling from the edge/outside of the simplex
 % Splitting of latent space
 
+% TODO: Citing
+In order to make use of the archetype representation of our data we need to
+sample archetype coefficients. Sampling from our deep archetypal architecture
+can be done as follows. The archetypes, wether they are updated during training
+or not, are taken to be fixed and saved. For a fixed configuration of
+archetypes the coefficients $a_{ij}$ can be sampled from a Dirichlet distribution,
+a generalization of the beta distribution for the multivariate case. For $k$
+archetypes and shape parameters $c_i > 0, i = 1, \dots, k$ the probability
+density function of the Dirichlet distribution is
+\begin{equation}%
+    \label{eq:dirichlet_pdf}
+    p(a_i) = \frac{ \Gamma ( \sum_j c_j ) }{ \prod_j \Gamma (c_j) } \prod_j
+    a_{ij}^{c_j - 1}
+\end{equation}
+\citep{forbesDirichletDistribution2010}
+
+Since the archetypes are already extreme examples we can control how atypical
+the samples should be and furthermore what features we want to be extreme by
+controlling the shape parameters.
+
+Once $N$ samples have been drawn we can compute samples from the
+$(k-1)$-dimensional latent space.
+\begin{equation}%
+    \label{eq:aa_k_sample}
+    \mathbf{t}_i' = \sum_j a_{ij} \mathbf{z_{j,\mathrm{fixed}}}
+\end{equation}
+
+In additon to the layers that map data from the latent space of the invertible
+neural network to the archetype space we need to train a layer that
+approximates the inverse to this, as a mapping to the $(k-1)$-dimensional
+subspace is in general not invertible. Details on how this layer is trained can
+be found in \autoref{sec:network_architecture}
+\begin{equation}%
+    \label{eq:aa_upsample}
+    \mathbf{t}_i = f_C (\mathbf{t}_i')
+\end{equation}
+Finally we can use the neural network to get samples in data space
+\begin{equation}%
+    \label{eq:aa_to_data}
+    \mathbf{x}_i = \mathrm{INN}^{-1} (\mathbf{t}_i)
+\end{equation}
+
+Additional modifications can be applied: We can add gaussian noise to the
+samples in any of the latent spaces to get more variation or more extreme
+samples.
+
+Another modification is to add a random sample to $\mathbf{t}_i$ from the
+nullspace of the mapping to the archetype space to mitigate the loss of
+information that occures.
+% TODO: Finish nullspace
+
 \section{Discriminator Training}%
 \label{sec:discriminator_training}
 
