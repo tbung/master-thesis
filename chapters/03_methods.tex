@@ -192,12 +192,96 @@ information that occures.
 \section{Network Architecture}%
 \label{sec:network_architecture}
 
+\begin{figure}[htpb]
+\begin{center}
+\begin{tikzpicture}[scale=1, transform shape]
+    \node[varnode] (x) {$x$};
+    \node[opnode] (inn) [right=of x] {INN};
+    \node[varnode] (t) [right=of inn] {$t$};
+
+    \node[opnode] (fa) at ($ (t) + (2cm,1cm) $) {$f_A$};
+    \node[opnode] (fb) at ($ (t) + (2cm,-1cm) $) {$f_B$};
+
+    \node[varnode] (A) [right=of fa] {$A$};
+    \node[varnode] (B) [right=of fb] {$B$};
+
+    \draw[grapharrow] (x)   -- (inn);
+    \draw[grapharrow] (inn)   -- (t);
+    \draw[grapharrow] (t)   -- (fa);
+    \draw[grapharrow] (t)   -- (fb);
+    \draw[grapharrow] (fa)   -- (A);
+    \draw[grapharrow] (fb)   -- (B);
+\end{tikzpicture}
+\end{center}
+\caption{}%
+\label{fig:}
+\end{figure}
+
+\begin{figure}[htpb]
+\begin{center}
+\begin{tikzpicture}[scale=1, transform shape]
+    \node[varnode] (x) {$x$};
+    \node[opnode] (inn) [right=of x] {INN};
+    \node[varnode] (t) [right=of inn] {$t$};
+
+    \node[opnode] (fc) [right=of t] {$f_C$};
+
+    \node[varnode] (ta) [right=of fc] {$t'$};
+
+    \draw[grapharrow] (ta)   -- (fc);
+    \draw[grapharrow] (fc)   -- (t);
+    \draw[grapharrow] (t)   -- (inn);
+    \draw[grapharrow] (inn)   -- (x);
+\end{tikzpicture}
+\end{center}
+\caption{}%
+\label{fig:}
+\end{figure}
+
+\tikzset{zoomnode/.style={rectangle, draw=grey!60, fill=grey!5, very thick, minimum
+width=60mm, minimum height=9mm}}
+\tikzset{title/.style={draw=none}}
+
+\begin{figure}[htpb]
+\begin{center}
+\begin{tikzpicture}[scale=1, transform shape]
+    \node (inn) [title] {INN};
+
+    \node (c1) [zoomnode, below=0.2cm of inn] {High-Resolution Convolutions};
+    \node (d1) [zoomnode, below=0.2cm of c1]  {Downsampling Layer};
+
+    \node (c2) [zoomnode, below=0.2cm of d1] {Low-Resolution Convolutions};
+    \node (d2) [zoomnode, below=0.2cm of c2]  {Downsampling Layer};
+
+    \node (c3) [zoomnode, below=0.2cm of d2] {Fully connected Layers};
+
+    \node [draw=red!60, inner sep=0.1cm, fit={(inn) (c1) (c2) (d1) (c3) (d2)}] {};
+\end{tikzpicture}
+\end{center}
+\caption{}%
+\label{fig:}
+\end{figure}
+
+
+
 % Architecture of the INN
+The architecture of the invertible neural network consists of a series of
+affine coupling blocks as discussed in \autoref{sub:coupling_layers}. The
+coupling functions are a series of three layers of either convolutions or
+linear mappings with rectified linear activation functions. Between sets of
+coupling layers downsampling is applied. The actual configuration of these
+components is specific to the experiments and mentioned in the respective
+subsections.
+
+As described in \autoref{sub:normalizing_flows} the network is train to
+minimize the negative log-likelihood of the training data.
 % Adding the AA layers
 
 \section{Datasets}%
 \label{sec:datasets}
 
+\citep{cohenEMNISTExtensionMNIST2017}
+\citep{anejaModelingStylizedCharacter2017a}
 % EMNIST
 % Also discuss the specifics of the datasets in EMNIST
 % FERG
