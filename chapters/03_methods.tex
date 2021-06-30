@@ -14,17 +14,6 @@ two methods of sampling outliers from a gaussian distribution. Sampling
 outliers in the Deep Archetypal Analysis case will be investigated in the next
 section.
 
-\subsection{Gumbel Distribution}%
-\label{sub:gumbel_distribution}
-
-\begin{figure}[htpb]
-    \centering
-    \includegraphics[width=0.8\linewidth]{figures/gumbel_uni.pdf}
-    \caption{Gumbel distribution}%
-    \label{fig:gumbel_uni}
-\end{figure}
-
-
 \subsection{High-Dimensional Gaussian Distributions}%
 \label{sub:high_dimensional_gaussian_distributions}
 % TODO: Proof?
@@ -70,6 +59,70 @@ distribution, we can simply sample coordinates $X_i \sim \mathcal{N}(0,
 
 % TODO: Typicality
 
+\subsection{Gumbel Distribution}%
+\label{sub:gumbel_distribution}
+
+\begin{figure}[htpb]
+    \centering
+    \includegraphics[width=0.8\linewidth]{figures/gumbel_uni.pdf}
+    \caption{Gumbel distribution}%
+    \label{fig:gumbel_uni}
+\end{figure}
+
+Since the latent space is approximately standard normally distributed one way
+to approach sampling from outliers is extreme value theory. Extreme value
+theory is the theory of the distribution of maxima of sequences of independet,
+identically distributed random variables. Let $z_1, \dots, z_n$ be a sequence
+of i.i.d. standard normally distributed random variables, then the asymtotic
+distribution of the maxima $M_n = \max (z_1, \dots, z_n)$ is
+\begin{equation}%
+    \label{eq:gumbel_distribution}
+    P{a_n ( M_n - b_n ) < x} \rightarrow e^{-e^{-x}}
+\end{equation}
+where
+\begin{equation}
+    \begin{aligned}%
+        \label{eq:gumbel_params}
+        &a_n = (2 \log n )^{1/2} \\
+        &b_n = (2 \log n )^{1/2} - \frac{1}{2} (2 \log n )^{1/2} (\log \log
+        n + \log 4 \pi)
+    \end{aligned}
+\end{equation}
+\citep{leadbetterAsymptoticDistributionsExtremes1983}.
+
+As an example, \autoref{fig:gumbel_uni} shows the distribution of the maxima of
+sequences of length $n = 100$ and $n = 100000$ drawn i.i.d. from a standard
+normal distribution in comparison.
+\begin{figure}[htpb]
+    \centering
+
+    \begin{subfigure}[]{0.48\textwidth}
+        \centering
+    \includegraphics[width=\linewidth]{figures/gumbel_multi_2.pdf}
+    \caption{}
+    \label{fig:}
+    \end{subfigure}
+    \begin{subfigure}[]{0.48\textwidth}
+        \centering
+    \includegraphics[width=\linewidth]{figures/gumbel_multi_1024.pdf}
+    \caption{}
+    \label{fig:}
+    \end{subfigure}
+
+    \caption{Gumbel distribution}%
+    \label{fig:gumbel_multi}
+\end{figure}
+
+This method of sampling outliers is especially useful in lower dimensions, as
+we cannot use the methods established in
+\autoref{sub:high_dimensional_gaussian_distributions}. We can see in
+\autoref{fig:gumbel_multi}, that for $d=2$ the distribution of the lengths of
+the random vectors is still rather close to a standard normal distribution, and
+indeed doubeling the variance does not lead to a distribution that is noticably
+different from the data distribution. For $d=1024$, as is the case for the
+image data used for the experiments, we can use the previously introduced
+method of sampling from a latent distribution with higher variance, as this
+leads to a significantly distinct distribution.
 
 \section{Geometrical Approach}%
 \label{sec:geometrical_approach}
