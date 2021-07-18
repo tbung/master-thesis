@@ -1,6 +1,7 @@
 \documentclass[12pt]{report}
 \usepackage[a4paper, width=150mm,top=25mm,bottom=25mm]{geometry}
 \usepackage[ngerman,english]{babel}
+\usepackage[ddmmyyyy]{datetime}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{setspace}
@@ -8,17 +9,21 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
-\usepackage[rgb]{xcolor}
+\usepackage[rgb,table]{xcolor}
 \usepackage{tikz}
 \usetikzlibrary{positioning,fit}
 \usetikzlibrary{calc,matrix}
 \usetikzlibrary{arrows.meta}
 \usetikzlibrary{shapes.misc}
 \usetikzlibrary{shapes.geometric}
-\usepackage[style=authoryear,natbib=true]{biblatex}
+\usetikzlibrary{paths.ortho}
+% \usepackage[style=authoryear,natbib=true]{biblatex}
+\usepackage[natbib=true]{biblatex}
 \usepackage{caption}
 \usepackage{subcaption}
+\usepackage{booktabs}
 \usepackage{fancyhdr}
+\usepackage[section]{placeins}
 \pagestyle{fancy}
 
 
@@ -61,6 +66,7 @@ size=2mm}}
 
 \newtheorem{definition}{Definition}[section]
 
+
 % Content starts here
 \bibliography{references}
 
@@ -75,6 +81,9 @@ size=2mm}}
 
 \begin{abstractpage}
     \begin{abstract}{english}
+        WIP
+    \end{abstract}
+    \begin{abstract}{ngerman}
         WIP
     \end{abstract}
 \end{abstractpage}
@@ -93,6 +102,11 @@ size=2mm}}
 \input{chapters/04_results.tex}
 \input{chapters/05_discussion.tex}
 
+\listoffigures
 \printbibliography
+
+\cleardoublepage
+\input{chapters/deposition.tex}
+\thispagestyle{empty}
 
 \end{document}
