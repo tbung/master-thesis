@@ -6,7 +6,7 @@ investigated in this thesis, as well as the methods used. We will first
 introduce the topic of outliers on an intuitive level and then try to highlight
 a more rigorous approach. We will move on to introduce neural network models
 especially in their invertible variant and how specific training schemes are
-particularly useful for investigating outliers. Finally we will introduce
+particularly useful for investigating outliers. Finally, we will introduce
 archetypal analysis as a general concept and also as an add-on to more
 complicated models.
 
@@ -14,10 +14,15 @@ complicated models.
 \section{Outliers And Outlier Detection}%
 \label{sec:outliers_an_outlier_detection}
 
-% - outliers are task specific, subjective
-% - methods of outlier detection
-%     - typicality
-%     - research more methods
+Outliers are data points in a data set, that differ significantly from other
+data points in the dataset in a way that makes them not indicative of other
+data from the same source. It is therefore necessary to determine what data
+points are outliers and how they should be handled in any task performed on the
+dataset~\citep{europeanmathematicalsocietyOutlierEncyclopediaMathematics}.
+Especially for extreme data points that still somewhat resemble the rest of the
+dataset it can be difficult to decide whether or not they are an outlier and
+this decision might ultimately subjective~\citep{zimekThereBackAgain2018}.
+% TODO: Expand
 
 
 \section{Invertible Neural Networks}% Generative Models?
@@ -30,20 +35,20 @@ simple, non-linear blocks.~\citep{lecunDeepLearning2015}
 
 As representation-learning methods, neural networks have found use for
 many discriminative as well as generative tasks. Especially in recent years
-many advance were made for generative methods using neural networks. One such
+many advances were made for generative methods using neural networks. One such
 advancement was the introduction of invertible neural networks. Neural
 networks, though not invertible in general, can be made fully invertible by
 cleverly designing its building blocks to be invertible.
 % invertible -> bijective?
 
-We will now briefly introduce two other generative models based on neural networks
-before introducing invertible neural networks in detail.
+% We will now briefly introduce two other generative models based on neural networks
+% before introducing invertible neural networks in detail.
 
-\paragraph{Generative Adversarial Networks}%
-\label{par:generative_adversarial_networks}
+% \paragraph{Generative Adversarial Networks}%
+% \label{par:generative_adversarial_networks}
 
-\paragraph{Variational Autoencoders}%
-\label{par:variational_autoencoders}
+% \paragraph{Variational Autoencoders}%
+% \label{par:variational_autoencoders}
 
 \subsection{Coupling Layers}%
 \label{sub:coupling_layers}
@@ -311,14 +316,7 @@ of the network the split parts are concatenated back together.
 % TODO: Figure latent space x -> z
 \begin{figure}[htpb]
     \centering
-    \begin{tikzpicture}
-        \node [] (a) at (0,0) {\includegraphics[width=0.3\linewidth]{figures/toy_example/gaussian_mixture/samples_grid.pdf}};
-        \node [] (b) [right=of a] {\includegraphics[width=0.3\linewidth]{figures/toy_example/gaussian_mixture/latent_grid_transformed.pdf}};
-        \node [] (c) [below=of a] {\includegraphics[width=0.3\linewidth]{figures/toy_example/gaussian_mixture/samples_grid_transformed.pdf}};
-        \node [] (d) [right=of c] {\includegraphics[width=0.3\linewidth]{figures/toy_example/gaussian_mixture/latent_grid.pdf}};
-        \draw[-{Straight Barb},line width=1mm] (a) -- (b);
-        \draw[{Straight Barb}-,line width=1mm] (c) -- (d);
-    \end{tikzpicture}
+    \includegraphics{figures/toy_example/gaussian_mixture/grid_transformed.pdf}
     \caption{Mapping between data and latent space}%
     \label{fig:normalizing_flow_mapping}
 \end{figure}
@@ -429,11 +427,12 @@ model~\citep{kellerLearningExtremalRepresentations2020}. In their paper they
 propose using a Deep Variational Information Bottelneck, here we will use a
 normalizing flow instead. The normalizing flow maps data vector $\mathbf{x}_i
 \in \mathbb{R}^d$ to a latent vector $\mathbf{t}_i \in \mathbb{R}^d$ that is
-approximately normally distributed. Additional linear layers map the latent
-vectors to archetype coefficients, the $k$ archetype vectors are initialized to
-be the vertices of a $(k-1)$-simplex, as there is no absolute frame of
-reference for the latent space coordinates. The archetype vectors can be fixed
-when training the flow, or can be allowed to update to accomodate a pretrained
-flow. The full model will be discussed in the next chapter.
+approximately normally distributed. Additional linear layers with softmax
+activations map the latent vectors to archetype coefficients, the $k$ archetype
+vectors are initialized to be the vertices of a $(k-1)$-simplex, as there is no
+absolute frame of reference for the latent space coordinates. The archetype
+vectors can be fixed when training the flow, or can be allowed to update to
+accomodate a pretrained flow. The full model will be discussed in the next
+chapter.
 
 % TODO: reformulate with A and B?
