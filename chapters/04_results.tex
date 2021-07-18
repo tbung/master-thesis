@@ -26,31 +26,29 @@ dataset we train a simple version of the normalizing flow introduced above. It
 consists of three additive coupling blocks, where the coupling
 functions are neural networks with five linear layers with rectified linear
 units as activation functions. As described in
-\autoref{sec:network_architecture} it is trained to maximize the likelihood of
+\autoref{sec:network_architecture}, it is trained to maximize the likelihood of
 the training data.
 % TODO: why additive
 
-Samples from the gaussian mixture toy dataset can be seen in
-\autoref{fig:gmm_sample_space}. The learned latent space for the gaussian
-mixture toy dataset is shown in \autoref{fig:gmm_latent_space}. As we can see
+Samples from the Gaussian mixture toy dataset and the learned latent space
+is shown in \autoref{fig:latent_gmm}. As we can see
 the latent space approximates a standard normal distribution and each class
 gets mapped to a region of this distribution.
 
-For the moons toy dataset, samples can be seen in
-\autoref{fig:moons_sample_space} and the learned latent space is shown in
-\autoref{fig:moons_latent_space}. Again we observe a reasonable approximation
+For the moons toy dataset, samples and the learned latent space are shown in
+\autoref{fig:latent_moons}. Again, we observe a reasonable approximation
 of a standard normal distribution in the latent space.
 
 % TODO: gumbel params
 We can now take a look at the generation of outliers. Since the latent space is
-low-dimensional we use the Gumbel distribution sampling as described in
+low-dimensional, we use the Gumbel distribution sampling as described in
 \autoref{sub:gumbel_distribution}. The sampled ring in
-the latent space can be seen in \autoref{fig:gmm_latent_space_gumbel} for the
-gaussian mixture dataset and in \autoref{fig:moons_latent_space_gumbel} for the
+the latent space can be seen in the bottom right of \autoref{fig:latent_gmm} for the
+Gaussian mixture dataset and in the bottom right of \autoref{fig:latent_moons} for the
 moons dataset. Using the normalizing flow to transform the outlier samples back
-to the data space we get samples that encase the inlier datas. For the gaussian
-mixture dataset this can be seen in \autoref{fig:gmm_sample_space_gumbel} and
-in \autoref{fig:moons_sample_space_gumbel} for the moons dataset.
+to the data space, we get samples that encase the inlier data. For the Gaussian
+mixture dataset this can be seen in the bottom left of \autoref{fig:latent_gmm} and
+in the bottom left of \autoref{fig:latent_moons} for the moons dataset.
 
 \begin{figure}[htpb]
 	\centering
@@ -66,28 +64,30 @@ in \autoref{fig:moons_sample_space_gumbel} for the moons dataset.
 	\label{fig:classifier_moons}
 \end{figure}
 
-To show how the generated outliers can be of use we can train a classifier on
+To show how the generated outliers can be of use, we can train a classifier on
 the toy datasets. The classifier is a simple neural network consisting of three
 linear layers with rectified linear units as activations. It is trained on the
 generated data to minimize the cross-entropy between the ground truth labels
 and the predicted labels. This simple setup leads to a classifier that
-performes well on both datasets, the decision regions can be seen in
-\autoref{fig:gmm_class} and \autoref{fig:moons_class} respectively. To get a
-measure of the confidence of the classifier we can inspect the entropy of the
-predicted class distribution. We can see in \autoref{fig:gmm_confidence} and
-\autoref{fig:moons_confidence}, that this classifier has high confidence
+performs well on both datasets. The decision regions can be seen in the top
+right of
+\autoref{fig:classifier_gmm} and \autoref{fig:classifier_moons} respectively. To get a
+measure of the confidence of the classifier, we can inspect the entropy of the
+predicted class distribution. We can see in the bottom left of
+\autoref{fig:classifier_gmm} and
+\autoref{fig:classifier_moons}, that this classifier has high confidence
 everywhere except in a small boundary region between the classes. This is often
-undesired, as this means outliers remain undetected and receive a oftentimes
+undesired as this means outliers remain undetected and receive a oftentimes
 wrong class prediction.
 
 This can be mitigated by augmenting the loss of the classifier as described in
 \autoref{sec:discriminator_training}. We train the classifier to minimize the
 Kullback-Leibler divergence between the predicted class distribution and a
-uniform class distribution over the generated outliers. As we can see in
-\autoref{fig:gmm_confidence_kl} and \autoref{fig:moons_confidence_kl} this
-leads to regions of low confidence all around the data regions while keeping
-good decision boundaries in the region of high confidence, shown in
-\autoref{fig:gmm_class_kl} and \autoref{fig:moons_class_kl}.
+uniform class distribution over the generated outliers. As we can see in the
+bottom right of \autoref{fig:classifier_gmm} and \autoref{fig:classifier_moons}
+this leads to regions of low confidence all around the data regions while
+keeping good decision boundaries in the region of high confidence, shown in the
+top left of \autoref{fig:classifier_gmm} and \autoref{fig:classifier_moons}.
 
 \section{Qualitative Comparison}%
 \label{sec:qualitative_comparison}
@@ -96,7 +96,7 @@ good decision boundaries in the region of high confidence, shown in
 	\centering
         \includegraphics{figures/samples/samples_increasing_distance_EMNIST.pdf}
 	\caption{Samples drawn from a multivariate normal distribution and
-		mapped back to the data space of the EMNIST dataset, the standard
+		mapped back to the data space of the digits dataset. The standard
 		deviation in terms of the standard deviation of the data in latent
 		space is shown below the images. Each row represents a class, each
 		column one sampling variance.}%
@@ -107,7 +107,7 @@ good decision boundaries in the region of high confidence, shown in
 	\centering
         \includegraphics{figures/samples/samples_increasing_distance_FERG_people.pdf}
 	\caption{Samples drawn from a multivariate normal distribution and
-		mapped back to the data space of the FERG dataset, the standard
+		mapped back to the data space of the people dataset. The standard
 		deviation in terms of the standard deviation of the data in latent
 		space is shown below the images. Each row represents a class, each
 		column one sampling variance.}%
@@ -126,28 +126,29 @@ Now we can inspect samples generated from the normalizing flow. Samples are
 generated by sampling from a multivariate normal distribution where the
 variance has been multiplied by some coefficient as described in
 \autoref{sec:extremal_sampling}. The samples with their variance coefficient
-are shown in \autoref{fig:emnist_sample_sigma}. As we can see, the images
+are shown in \autoref{fig:emnist_sample_sigma}. Evidently, the images
 become increasingly distorted without accumulating much noise, exactly as
 expected. Note that the difference in the kind of distortion is that no
 particular weight has been placed on structuring the latent space in a
 meaningful way and the direction in the latent space is completely random, only
 the variance and thereby the radius of the hyperspherical shell has been fixed.
-We can also see that images close to the origin are smoother, enableing the
-generation of images that could be viewed as prototypical of each class. Again,
-as discussed in \autoref{sub:high_dimensional_gaussian_distributions} we can
+We can also see that images close to the origin are smoother, enabling the
+generation of images that could be viewed as prototypical of each class.
+Following the discussion in
+\autoref{sub:high_dimensional_gaussian_distributions}, we can
 easily see how those images are smoother than the majority of the training data
 and therefore do not make up the majority of the mass of the distribution.
 
-To consider more complex data, we can repeat this investigation on the FERG
+To consider more complex data, we can repeat this investigation on the people
 dataset introduced in \autoref{sec:datasets}. As described above, the dataset
 can be ordered by character or by emotion, we choose the character as the class
 here. The normalizing flow trained on FERG consists of four high-resolution
 convolutional coupling blocks followed by twelve low-resolution convolutional
 coupling blocks and twelve linear coupling blocks. It is trained for 1500
 epochs with a learning rate of $10^{-4}$ reduced by a factor of ten every 500
-epochs. Samples are again generated as in the case of the EMNIST dataset, we
+epochs. Samples are again generated as in the case of the EMNIST dataset. We
 can inspect the samples with their variance coefficients in
-\autoref{fig:ferg_sample_sigma}. Immediately we can see, that one has to sample
+\autoref{fig:ferg_sample_sigma}. Apparently one has to sample
 much further from the origin in terms of the variance than in the EMNIST case,
 suggesting the data is more spread and is approximated worse by a normal
 distribution in latent space. We can again see different extreme images that
@@ -161,13 +162,13 @@ position of classes in the latent space in the next section.
 \section{Archetypal Analysis}%
 \label{sec:archetypal_analysis}
 
-Let us now take a look at sample generation, when we additionally add the
+Let us now take a look at sample generation when we additionally add the
 archetype mapping to the normalizing flow as described in
 \autoref{sec:geometrical_approach}. We first have to consider the choice of the
 number of archetypes, for that we follow Keller et
 al.~\citep{kellerLearningExtremalRepresentations2020} and train multiple models
 with different numbers of archetypes. All models are trained with the
-pretrained flow from the previous section, the flow parameters are fixed while
+pretrained flow from the previous section. The flow parameters are fixed while
 the positions of the archetypes in latent space and the parameters of the
 linear mapping layers are trained. We then compute
 the mean squared error for the reconstruction of all samples in the training
@@ -177,9 +178,9 @@ is 14 archetypes, achieving a good reconstruction error while still keeping the
 number of archetypes low. For the FERG dataset the mean squared error as a
 function of the number of archetypes can be seen in \autoref{fig:ferg_aa_mse},
 the ideal choice are seven archetypes. This is notable, because it lines up
-with the seven expressions present in the dataset. This suspicion is confirmed
+with the seven expressions present in the dataset. Indeed,
 when showing the sample from each class in the training data that is closest to
-the archetypes in \autoref{fig:ferg_aa_closest}. The archetypes can clearly be
+the archetypes in \autoref{fig:ferg_aa_closest}, the archetypes can clearly be
 identified with the expressions.
 
 \begin{figure}[htpb]
@@ -198,7 +199,7 @@ identified with the expressions.
 	\label{fig:ferg_aa_mse}
 \end{figure}
 
-One thing to consider is, that with an increasing number of archetypes, the
+Note that with an increasing number of archetypes, the
 clear interpretability of the individual archetypes is reduced and clearly
 distinguishable features become redundant with only subtle differences. This
 can be seen when we investigate the images from the training dataset and each
@@ -221,18 +222,19 @@ class closest to the archetypes as in \autoref{fig:emnist_aa_closest}.
 	\label{fig:ferg_aa_closest}
 \end{figure}
 
-In \autoref{fig:aa_emnist} we can see samples generated by sampling from a
+\autoref{fig:aa_emnist} depicts samples generated by sampling from a
 Dirichlet distribution and mapping those samples back into the data space of
-the EMNIST dataset. To see extreme samples one could consider outliers we can
+the EMNIST dataset. To identify extreme samples, or outliers, we can
 change the shape parameters of the Dirichlet distribution to draw samples close
-to one of the archetypes. \autoref{fig:aa_emnist_corners} shows such samples.
-We can clearly see how the images are distorted and extreme in specific ways
-related to the archetype. This could allow for example to investigate what
+to one of the archetypes. \autoref{fig:aa_emnist_corners} shows such samples as
+well as how the images are distorted in specific ways
+related to the archetype. This could allow, for example, to investigate what
 extreme points in the data may look like and obtain an intuition for outliers
-that could act as adverserial data points.
-The same experiment can be done with the model trained on the FERG dataset. We
-can see in \autoref{fig:aa_ferg} and \autoref{fig:aa_ferg_corners} that we
-again are able to generate in-distribution samples and also extreme samples,
+that could act as adversarial data points.
+The same experiment can be done with the model trained on the FERG dataset.
+
+Turning to \autoref{fig:aa_ferg} and \autoref{fig:aa_ferg_corners}, we
+are again able to generate in-distribution samples and also extreme samples,
 where the distorted features are again controlled by the archetypes via the
 shape parameters of the Dirichlet distribution. Notably, extreme samples
 generated are also more distorted then the samples closest to the archetypes
@@ -317,7 +319,7 @@ from the dataset shown in \autoref{fig:emnist_aa_closest} and
 
 For the EMNIST dataset, the number of archetypes needed to achieve a low
 reconstruction error is surprisingly high. Another way to improve
-reconstructions and thereby the quality of generated samples is augmenting the
+reconstructions, and thereby the quality of generated samples, is augmenting the
 samples with samples from the nullspace of the mapping to archetype space. This
 works especially well when using no bias in the mapping. A model with three
 archetypes and no bias thereby achieves a mean squared reconstruction error of
@@ -351,23 +353,25 @@ the corners.
 
 After investigating the models qualitatively, we will now look more closely
 into the latent space and how different samples and classes relate to each
-other. We again begin our investigation with EMNIST.
+other. Our investigation begins with EMNIST.
 
 To check our intuition, that classes that are similar to each other visually
 should be placed close to each other in latent space we can check cluster
-distances between classes. For that we compute the latent vectors of the data we
-want to test conditioned on each of the classes in EMNIST. To ease computation
-and visualization we performe linear discriminant analysis on each of the class
-pairs and project the data on the first to components of the linear
-discriminant analysis. We then compute the mean euclidean distance of 1000
+distances between classes. For that we compute the latent vectors of the data
+in question conditioned on each of the classes in EMNIST. To ease computation
+and visualization we perform a linear discriminant analysis on each of the class
+pairs and project the data on the first two components of the linear
+discriminant analysis. Next, we compute the mean euclidean distance of 1000
 sample pairs from the two classes. The result is shown as a colored matrix in
-\autoref{fig:emnist_distance_matrix} for a comparison of EMNIST to it self and
+\autoref{fig:emnist_distance_matrix} for a comparison of EMNIST to itself and
 in \autoref{fig:emnist_distance_matrix_letters} for a comparison to the letters
-dataset. As expected, classes that are visually similar are close together,
-consider for example the class 6 when conditioned on 0, but also more
-unexpected but understandable relations are revealed, such as class 9 being
-close to class 4 when conditioned on 4 and class 2 being close to class 8 when
-conditioned on 8. Also notable is the asymmetry of the matrix. This is due to
+dataset. As expected, classes that are visually similar are close together:
+Consider, for example, how the class \texttt{6} is close to class \texttt{0}
+when the network is conditioned on class \texttt{0}, but also more unexpected
+relations are revealed, such as class \texttt{9} being
+close to class \texttt{4} when conditioned on \texttt{4} and class \texttt{2}
+being close to class \texttt{8} when
+conditioned on \texttt{8}. Also notable is the asymmetry of the matrix. This is due to
 the fact that the class conditioning makes the flow maximize the likelihood of
 samples of the class matching the condition, while the combination of a class
 condition with a foreign class sample is unseen during training and therefore

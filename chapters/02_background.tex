@@ -58,31 +58,31 @@ functions. The function $\mathcal{F}$ a neural network with $L$ layers computes
 is given by
 \begin{equation}%
     \label{eq:neural_network}
-    \mathcal{F} = f_L \circ \dots \circ f_2 \circ f_1
+    \mathcal{F} = f_L \circ \dots \circ f_2 \circ f_1\;.
 \end{equation}
 
-If we design all layers to be bijective and have tractable Jacobian determinant the whole
-forward computation is invertible by composing the inverse layers in reverse
-order.
+If we design all layers to be bijective and have tractable Jacobian
+determinants the whole forward computation is invertible by composing the
+inverse layers in reverse order, i.e.
 \begin{equation}%
     \label{eq:neural_network_inv}
-    \mathcal{F}^{-1} = f_L^{-1} \circ \dots \circ f_2^{-1} \circ f_1^{-1}
+    \mathcal{F}^{-1} = f_L^{-1} \circ \dots \circ f_2^{-1} \circ f_1^{-1}\;.
 \end{equation}
 
 Dinh et al.\ \citep{dinhNICENonlinearIndependent2015} describe a family of transformations
 called coupling layers, that can be used as components in a invertible neural
-network. In general, coupling layers are defined as follows
+network. In general, coupling layers are defined by Dinh et al. as follows
 
 \begin{definition}[General Coupling Layer]
-    Let $x \in \mathcal{X}$, the input to the layer, be a vector in $\mathbb{R}^D$
+    Let $\mathbf{x} \in \mathbb{R}^D$
     and $I_1, I_2$ a partition of $[1, D]$ such that $d = |I_1|$ and $m$ a
-    function defined on $\mathbb{R}^d$. We can then define $y = (y_{I_1},
-    y_{I_2})$ as
+    function defined on $\mathbb{R}^d$. We can then define $\mathbf{y} =
+    [\mathbf{y}_{I_1}, \mathbf{y}_{I_2}]$ as
     \begin{equation}
         \begin{aligned}%
             \label{eq:coupling_layer_transform}
-            y_{I_1} &= x_{I_1} \\
-            y_{I_2} &= g(x_{I_2};m(x_{I_1}))
+            \mathbf{y}_{I_1} &= \mathbf{x}_{I_1} \\
+            \mathbf{y}_{I_2} &= g(\mathbf{x}_{I_2};m(\mathbf{x}_{I_1}))\;,
         \end{aligned}
     \end{equation}
     where $g: \mathbb{R}^{D-d} \times m(\mathbb{R}^d) \rightarrow
@@ -101,8 +101,8 @@ The coupling layer transformation then becomes
 \begin{equation}
     \begin{aligned}%
         \label{eq:add_coupling_transform}
-        y_{I_1} &= x_{I_1} \\
-        y_{I_2} &= x_{I_2} + m(x_{I_1})
+        \mathbf{y}_{I_1} &= \mathbf{x}_{I_1} \\
+        \mathbf{y}_{I_2} &= \mathbf{x}_{I_2} + m(\mathbf{x}_{I_1})\;.
     \end{aligned}
 \end{equation}
 This transformation has unit Jacobian determinant, i.e.\ is volume preserving.
@@ -114,11 +114,11 @@ network. This however comes at the cost of what transformations can be learned.
     \begin{subfigure}[t]{0.8\textwidth}
         \centering
         \begin{tikzpicture}
-            \node[varnode] (x1)                   {$x_{I_1}$};
+            \node[varnode] (x1)                   {$\mathbf{x}_{I_1}$};
             \node[connectnode] (c1)   [right=0.5cm of x1]    {};
-            \node[varnode] (y1) [right=5cm of x1] {$y_{I_1}$};
-            \node[varnode] (x2) [below=2.5cm of x1] {$x_{I_2}$};
-            \node[varnode] (y2) [right=5cm of x2] {$y_{I_2}$};
+            \node[varnode] (y1) [right=5cm of x1] {$\mathbf{y}_{I_1}$};
+            \node[varnode] (x2) [below=2.5cm of x1] {$\mathbf{x}_{I_2}$};
+            \node[varnode] (y2) [right=5cm of x2] {$\mathbf{y}_{I_2}$};
             \node[opnode] (plus) [right=3.0cm of x2] {$+$};
             \node[opnode] (m) at ($(c1)!2cm!(plus)$) {$m$};
 
@@ -134,11 +134,11 @@ network. This however comes at the cost of what transformations can be learned.
     \begin{subfigure}[b]{0.8\textwidth}
         \centering
         \begin{tikzpicture}
-            \node[varnode] (x1)                   {$x_{I_1}$};
-            \node[varnode] (y1) [right=5cm of x1] {$y_{I_1}$};
+            \node[varnode] (x1)                   {$\mathbf{x}_{I_1}$};
+            \node[varnode] (y1) [right=5cm of x1] {$\mathbf{y}_{I_1}$};
             \node[connectnode] (c1)   [left=0.5cm of y1]    {};
-            \node[varnode] (x2) [below=2.5cm of x1] {$x_{I_2}$};
-            \node[varnode] (y2) [right=5cm of x2] {$y_{I_2}$};
+            \node[varnode] (x2) [below=2.5cm of x1] {$\mathbf{x}_{I_2}$};
+            \node[varnode] (y2) [right=5cm of x2] {$\mathbf{y}_{I_2}$};
             \node[opnode] (plus) [left=3.0cm of y2] {$-$};
             \node[opnode] (m) at ($(c1)!2cm!(plus)$) {$m$};
 
@@ -163,8 +163,9 @@ al.~\citep{dinhDensityEstimationUsing2017} is
 \begin{equation}
     \begin{aligned}%
         \label{eq:affine_coupling_transform}
-        y_{I_1} &= x_{I_1} \\
-        y_{I_2} &= x_{I_2} \odot \exp ( s(x_{I_1})) + t(x_{I_1})
+        \mathbf{y}_{I_1} &= \mathbf{x}_{I_1} \\
+        \mathbf{y}_{I_2} &= \mathbf{x}_{I_2} \odot \exp ( s(\mathbf{x}_{I_1}))
+        + t(\mathbf{x}_{I_1})\;.
     \end{aligned}
 \end{equation}
 where $s$ and $t$ are arbitrary functions that map $\mathbb{R}^{D-d}
@@ -175,8 +176,9 @@ $s$ and $t$
 \begin{equation}
     \begin{aligned}%
         \label{eq:inv_affine_coupling_transform}
-        x_{I_1} &= y_{I_1} \\
-        x_{I_2} &= (y_{I_2} - t(y_{I_1})) \odot \exp (-s(y_{I_1}))
+        \mathbf{x}_{I_1} &= \mathbf{y}_{I_1} \\
+        \mathbf{x}_{I_2} &= (\mathbf{y}_{I_2} - t(\mathbf{y}_{I_1})) \odot \exp
+        (-s(\mathbf{y}_{I_1}))\;.
     \end{aligned}
 \end{equation}
 
@@ -185,12 +187,12 @@ $s$ and $t$
     \begin{subfigure}[b]{0.8\textwidth}
         \centering
         \begin{tikzpicture}
-            \node[varnode]     (x1)                          {$x_{I_1}$};
+            \node[varnode]     (x1)                          {$\mathbf{x}_{I_1}$};
             \node[connectnode] (c1)   [right=0.5cm of x1]    {};
             \node[connectnode] (c2)   [right=1.7cm of x1]    {};
-            \node[varnode]     (y1)   [right=5cm   of x1]    {$y_{I_1}$};
-            \node[varnode]     (x2)   [below=2.5cm of x1]    {$x_{I_2}$};
-            \node[varnode]     (y2)   [right=5cm   of x2]    {$y_{I_2}$};
+            \node[varnode]     (y1)   [right=5cm   of x1]    {$\mathbf{y}_{I_1}$};
+            \node[varnode]     (x2)   [below=2.5cm of x1]    {$\mathbf{x}_{I_2}$};
+            \node[varnode]     (y2)   [right=5cm   of x2]    {$\mathbf{y}_{I_2}$};
             \node[opnode]      (plus) [right=1.5cm of x2]    {$+$};
             \node[opnode]      (mul)  [right=2.7cm of x2]    {$\times$};
             \node[opnode]      (t)    at ($(c1)!2cm!(plus)$) {$t$};
@@ -211,12 +213,12 @@ $s$ and $t$
     \begin{subfigure}[b]{0.8\textwidth}
         \centering
         \begin{tikzpicture}
-            \node[varnode]     (x1)                          {$x_{I_1}$};
-            \node[varnode]     (y1)   [right=5cm   of x1]    {$y_{I_1}$};
+            \node[varnode]     (x1)                          {$\mathbf{x}_{I_1}$};
+            \node[varnode]     (y1)   [right=5cm   of x1]    {$\mathbf{y}_{I_1}$};
             \node[connectnode] (c1)   [left=0.5cm of y1]    {};
             \node[connectnode] (c2)   [left=1.7cm of y1]    {};
-            \node[varnode]     (x2)   [below=2.5cm of x1]    {$x_{I_2}$};
-            \node[varnode]     (y2)   [right=5cm   of x2]    {$y_{I_2}$};
+            \node[varnode]     (x2)   [below=2.5cm of x1]    {$\mathbf{x}_{I_2}$};
+            \node[varnode]     (y2)   [right=5cm   of x2]    {$\mathbf{y}_{I_2}$};
             \node[opnode]      (plus) [left=1.5cm of y2]    {$-$};
             \node[opnode]      (mul)  [left=2.7cm of y2]    {$\div$};
             \node[opnode]      (t)    at ($(c1)!2cm!(plus)$) {$t$};
@@ -240,7 +242,7 @@ computation.}%
 \end{figure}
 
 To ensure all inputs are used we need to use at least two coupling blocks and
-switch $x_{I_1}$ and $x_{I_2}$ between them.
+switch $\mathbf{x}_{I_1}$ and $\mathbf{x}_{I_2}$ between them.
 
 % TODO: IRevNetDownsampling and permute layers %
 \subsection{Downsampling}%
@@ -298,13 +300,13 @@ vision, the inputs are downsampled in the network. This is usually done with
 strided convolutions, maximum or average pooling. Since these operations entail
 a loss of information they are not bijective and cannot be used in an
 invertible neural network architecture, at least outside of coupling functions.
-To still be able to increase field of vision of convolutions and decrease the
-amount of computations in later layers different strategies can be used. Gomez
-et al. used a pixel shuffle operation, where spatial dimensions are reduce and
+To still be able to increase the field of vision of convolutions and decrease the
+amount of computations in subsequent layers different strategies can be used. Gomez
+et al. used a pixel shuffle operation, in which spatial dimensions are reduce and
 shifted into channel dimensions as shown
 in~\autoref{fig:downsampling}~\citep{gomezReversibleResidualNetwork2017}. 
 
-A strategy to reduce the amount of computations done in deeper layers data can
+A strategy to reduce the amount of computations done in deeper layers, data can
 simply be split of. The part that is split of can than be trained to resemble
 noise while the other part continues through coupling layers. Towards the end
 of the network the split parts are concatenated back together.
@@ -324,7 +326,7 @@ of the network the split parts are concatenated back together.
 Normalizing flows transform a simple probability distributions, such as a
 standard normal distribution, into a complex, often intractable probability
 distribution~\citep{kobyzevNormalizingFlowsIntroduction2020}. They are composed
-of a series of invertible transformations, e.g. the coupling layers we defined
+of a series of invertible transformations, e.g., the coupling layers we defined
 above. The complex probability distribution can be evaluated on a sample by
 transforming it back to the simple distribution and using the change of
 variables formula.
@@ -339,7 +341,8 @@ variables formula
 \begin{equation}%
     \label{eq:change_of_variables}
     p_{\mathbf{x}}(\mathbf{x}_i) =
-    p_{\mathbf{z}}(\mathcal{F}^{-1}(\mathbf{x}_i)) \lvert J_{\mathbf{x}} \rvert^{-1}
+    p_{\mathbf{z}}(\mathcal{F}^{-1}(\mathbf{x}_i)) \lvert J_{\mathbf{x}}
+    \rvert^{-1}\;,
 \end{equation}
 where
 \begin{equation}%
@@ -351,7 +354,8 @@ $\mathcal{F}$ is defined as in~\autoref{eq:neural_network}, the Jacobian is
 simply
 \begin{equation}%
     \label{eq:jacobian_chain_rule}
-    J_{\mathbf{x}} = \prod \det \frac{\partial f_i^{-1} (\mathbf{x})}{\partial \mathbf{x}}
+    J_{\mathbf{x}} = \prod \det \frac{\partial f_i^{-1} (\mathbf{x})}{\partial
+    \mathbf{x}}\;.
 \end{equation}
 
 To train a neural network as a normalizing flow we can simply maximize the
@@ -362,7 +366,8 @@ be simply calculated as
 % TODO: Check this again
 \begin{equation}%
     \label{eq:nll_loss}
-    \mathrm{NLL} = \frac{1}{N} \sum_i \lVert \mathcal{F}^{-1} (\mathbf{x}_i) \rVert^2 - \log J_{\mathbf{x}}
+    \mathrm{NLL} = \frac{1}{N} \sum_i \lVert \mathcal{F}^{-1} (\mathbf{x}_i)
+    \rVert^2 - \log J_{\mathbf{x}}\;.
 \end{equation}
 
 
@@ -379,58 +384,57 @@ individuals of pure type or archetypes~\citep{cutlerArchetypalAnalysis1994}. A
 simple way to formulate this representation is by a variant of principal
 components. A data vector $\mathbf{x}_i \in \mathbb{R}^d$ from a dataset of $n$
 samples is represented by coefficients $a_{ij}$ and $m \leq \min(n, d)$
-archetype vectors $\mathbf{z}_j \in \mathbb{R}^d$
-
-% TODO: Those eqs are not correct yet
+archetype vectors $\mathbf{z}_j \in \mathbb{R}^d$, i.e.,
 \begin{equation}%
     \label{eq:data_from_archetypes}
-    \mathbf{x}_i = \sum_j a_{ij} \mathbf{z}_j
+    \mathbf{x}_i = \sum_j a_{ij} \mathbf{z}_j\;.
 \end{equation}
 In turn, the archetypes are computed from the data using coefficients $b_{ji}$
+according to
 \begin{equation}%
     \label{eq:archetypes_from_data}
-    \mathbf{z}_j = \sum_i b_{ji} \mathbf{x}_i
+    \mathbf{z}_j = \sum_i b_{ji} \mathbf{x}_i\;.
 \end{equation}
 Without further constraints this approach does not fulfill the requirements,
-that the templates are pure archetypes and that $x_i$ are represented as
+that the templates are pure archetypes and that $\mathbf{x}_i$ are represented as
 mixtures of the archetypes. If we subject the coefficient to the following
-constraints
+constraints:
 \begin{equation}
     \begin{aligned}%
         \label{eq:archetype_constraints}
-        a_{ij} \geq 0 &\textrm{ and } \sum_{j=1}^{m} a_{ij} = 1 \\
-        b_{ji} \geq 0 &\textrm{ and } \sum_{i=1}^{n} b_{ji} = 1
+        a_{ij} \geq 0 &\textrm{ and } \sum_{j=1}^{m} a_{ij} = 1\;, \\
+        b_{ji} \geq 0 &\textrm{ and } \sum_{i=1}^{n} b_{ji} = 1\;,
     \end{aligned}   
 \end{equation}
-we obtain the desired representation. The archetypes now represent the data
+we obtain the desired representation. The archetypes now represent the data's
 convex hull.
 
-Finding the weights $a_ij$ and $b_ij$ can be done by minimizing the square
+Finding the weights $a_{ij}$ and $b_{ij}$ can be done by minimizing the square
 error in the representation
 \begin{equation}
-    \begin{aligned}
+    % \begin{aligned}
         \label{eq:archetype_rss}
         \min_{a,b} \sum_i \lVert \mathbf{x}_i - \sum_j a_{ij} \mathbf{z}_j
-        \rVert^2 \\
+        \rVert^2
         = \min_{a,b} \sum_l \lVert \mathbf{x}_l - \sum_j a_{lj} \sum_i
         b_{ji} \mathbf{x}_i \rVert^2
-    \end{aligned}
+    % \end{aligned}
 \end{equation}
 Cutler et al. propose an alternating least squares
 algorithm to solve this optimization~\citep{cutlerArchetypalAnalysis1994}.
 Bauckhage et al. introduced a more efficient algorithm based on
 sub-gradients~\citep{bauckhageArchetypalAnalysisAutoencoder2015}, which is also
-used in \textcolor{red}{FIGURE}.
+used in \textcolor{red}{FIGURE}. % TODO: do I need this?
 Keller et al. build on this framework by applying archetypal analysis to the
 latent space of a deep generative
 model~\citep{kellerLearningExtremalRepresentations2020}. In their paper they
-propose using a Deep Variational Information Bottelneck, here we will use a
+propose using a Deep Variational Information Bottelneck. Here we will use a
 normalizing flow instead. The normalizing flow maps data vector $\mathbf{x}_i
 \in \mathbb{R}^d$ to a latent vector $\mathbf{t}_i \in \mathbb{R}^d$ that is
 approximately normally distributed. Additional linear layers with softmax
-activations map the latent vectors to archetype coefficients, the $k$ archetype
-vectors are initialized to be the vertices of a $(k-1)$-simplex, as there is no
-absolute frame of reference for the latent space coordinates. The archetype
+activations map the latent vectors to archetype coefficients. As there is no
+absolute frame of reference for the latent space coordinates, the $k$ archetype
+vectors are initialized to be the vertices of a $(k-1)$-simplex. The archetype
 vectors can be fixed when training the flow, or can be allowed to update to
 accomodate a pretrained flow. The full model will be discussed in the next
 chapter.

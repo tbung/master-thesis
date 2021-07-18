@@ -23,42 +23,45 @@ section.
 % TODO: Proof?
 Since we are working with high-dimensional data, we can investigate the
 behavior of random vectors in high dimensions.
-Consider the vector $X = (X_1, X_2, \dots, X_d)$ in $\mathbb{R}^d$, where the
-coordinates $X_i$ are independently distributed with zero mean and unit
-variance. The squared length of vector $X$ is
+Consider the vector $\mathbf{x} = (x_1, x_2, \dots, x_d)$ in $\mathbb{R}^d$, where the
+coordinates $x_i$ are independently distributed with zero mean and unit
+variance. The squared length of vector $\mathbf{x}$ is
 \begin{equation}%
 	\label{eq:square_norm}
-	\lVert X \rVert_2^2 = \sum_d X_i^2
+	\lVert \mathbf{x} \rVert_2^2 = \sum_d x_i^2\;.
 \end{equation}
-If we assume the coordinates $X_i$ to be standard normally distributed, the
+If we assume the coordinates $x_i$ to be standard normally distributed, the
 length of the vector is distributed according to a chi distribution with
 $d$ degrees of freedom
 \begin{equation}%
 	\label{eq:sq_norm_chi}
-	\lVert X \rVert_2 \sim \chi_d
+	\lVert \mathbf{x} \rVert_2 \sim \chi_d\;.
 \end{equation}
-If the coordinates are distributed with non-unit variance, $X_i \sim
+If the coordinates are distributed with non-unit variance, $x_i \sim
 	\mathcal{N}(0, \sigma^2)$, we similarly get
 \begin{equation}%
 	\label{eq:sq_norm_chi_sigma}
-	\lVert X \rVert_2 \sim \sigma\chi_d
+	\lVert \mathbf{x} \rVert_2 \sim \sigma\chi_d
 \end{equation}
 
-We can now look at the expected length of the random vector $X$
-\begin{equation}
-	\begin{aligned}%
-		\label{eq:mean_var_sq_dist}
-		\mathbb{E} \lVert X \rVert_2   & = \sqrt{2} \frac{\Gamma(\frac{d +
-		1}{2})}{\Gamma(\frac{d}{2})}                                            \\
-		\mathrm{Var} \lVert X \rVert_2 & = d - (\mathbb{E} \lVert X \rVert_2)^2
-	\end{aligned}
+Assessing length of the random vector $\mathbf{x}$ via it's expectation value
+\begin{equation}%
+    \label{eq:mean_sq_dist}
+    \mathbb{E} \lVert \mathbf{x} \rVert_2   & = \sqrt{2} \frac{\Gamma(\frac{d +
+    1}{2})}{\Gamma(\frac{d}{2})}\;,
 \end{equation}
-meaning even though the area of highest probability for a high-dimensional
+and variance
+\begin{equation}%
+    \label{eq:var_sq_dist}
+    \mathrm{Var} \lVert \mathbf{x} \rVert_2 & = d - (\mathbb{E}
+    \lVert \mathbf{x} \rVert_2)^2\;,
+\end{equation}
+suggests that even though the area of highest probability for a high-dimensional
 standard normal distribution is close to the origin, most of the mass will be
 in a thin, hyperspherical shell with radius $\sim \sqrt{d}$.
 
 If we want to sample from a shell around a high-dimensional standard normal
-distribution, we can simply sample coordinates $X_i \sim \mathcal{N}(0,
+distribution, we can simply draw coordinates $x_i \sim \mathcal{N}(0,
 	\sigma^2)$ and choose $\sigma$ such that a desired radius is reached.
 
 % TODO: Typicality
@@ -74,27 +77,27 @@ distribution, we can simply sample coordinates $X_i \sim \mathcal{N}(0,
 \end{figure}
 
 Since the latent space is approximately standard normally distributed one way
-to approach sampling from outliers is extreme value theory. Extreme value
-theory is the theory of the distribution of maxima of sequences of independet,
-identically distributed random variables. Let $z_1, \dots, z_n$ be a sequence
-of i.i.d. standard normally distributed random variables, then the asymtotic
-distribution of the maxima $M_n = \max (z_1, \dots, z_n)$ is
+to approach sampling from outliers is extreme value theory --- the theory of
+the distribution of sequence maxima of independent, identically distributed
+(i.i.d.) random variables. Let $z_1, \dots, z_n$ be a sequence of i.i.d.
+standard normally distributed random variables, then the asymtotic distribution
+of the maxima $M_n = \max (z_1, \dots, z_n)$ is
 \begin{equation}%
 	\label{eq:gumbel_distribution}
-	P{a_n ( M_n - b_n ) < x} \rightarrow e^{-e^{-x}}
+	P(a_n ( M_n - b_n ) < x) \rightarrow e^{-e^{-x}}\;,
 \end{equation}
 where
 \begin{equation}
 	\begin{aligned}%
 		\label{eq:gumbel_params}
-		 & a_n = (2 \log n )^{1/2}                                            \\
+		 & a_n = (2 \log n )^{1/2}\;,                                         \\
 		 & b_n = (2 \log n )^{1/2} - \frac{1}{2} (2 \log n )^{1/2} (\log \log
-		n + \log 4 \pi)
+		n + \log 4 \pi)\;.
 	\end{aligned}
 \end{equation}
 \citep{leadbetterAsymptoticDistributionsExtremes1983}.
 
-As an example, \autoref{fig:gumbel_uni} shows the distribution of the maxima of
+\autoref{fig:gumbel_uni} shows an exemplary distribution of the maxima of
 sequences of length $n = 100$ and $n = 100000$ drawn i.i.d. from a standard
 normal distribution in comparison.
 \begin{figure}[htpb]
@@ -108,10 +111,10 @@ normal distribution in comparison.
 
 This method of sampling outliers is especially useful in lower dimensions, as
 we cannot use the methods established in
-\autoref{sub:high_dimensional_gaussian_distributions}. We can see in
-\autoref{fig:gumbel_multi}, that for $d=2$ the distribution of the lengths of
+\autoref{sub:high_dimensional_gaussian_distributions}. 
+\autoref{fig:gumbel_multi} illustrates, that for $d=2$ the distribution of the lengths of
 the random vectors is still rather close to a standard normal distribution, and
-indeed doubeling the variance does not lead to a distribution that is noticably
+indeed doubling the variance does not lead to a distribution that is noticeably
 different from the data distribution. For $d=1024$, as is the case for the
 image data used for the experiments, we can use the previously introduced
 method of sampling from a latent distribution with higher variance, as this
@@ -131,23 +134,23 @@ density function of the Dirichlet distribution is
 \begin{equation}%
 	\label{eq:dirichlet_pdf}
 	p(a_i) = \frac{ \Gamma ( \sum_j c_j ) }{ \prod_j \Gamma (c_j) } \prod_j
-	a_{ij}^{c_j - 1}
+	a_{ij}^{c_j - 1}\;.
 \end{equation}
 \citep{forbesDirichletDistribution2010}
 
-Since the archetypes are already extreme examples we can control how atypical
+Since the archetypes are already extreme examples, we can control how atypical
 the samples should be and furthermore what features we want to be extreme by
 controlling the shape parameters.
 
 Once $N$ samples have been drawn we can compute samples from the
-$(k-1)$-dimensional latent space.
+$(k-1)$-dimensional latent space via
 \begin{equation}%
 	\label{eq:aa_k_sample}
-	\mathbf{t}_i' = \sum_j a_{ij} \mathbf{z_{j,\mathrm{fixed}}}
+	\mathbf{t}_i' = \sum_j a_{ij} \mathbf{z_{j,\mathrm{fixed}}}\;.
 \end{equation}
 
-In additon to the layers that map data from the latent space of the invertible
-neural network to the archetype space we need to train a layer that
+In addition to the layers that map data from the latent space of the invertible
+neural network to the archetype space we need to train a layer $f_C$ that
 approximates the inverse to this, as a mapping to the $(k-1)$-dimensional
 subspace is in general not invertible. The layer is chosen to be a linear layer
 with no activation function, details on how this layer is trained can
@@ -156,29 +159,29 @@ be found in \autoref{sec:network_architecture}
 	\label{eq:aa_upsample}
 	\mathbf{t}_i = f_C (\mathbf{t}_i')
 \end{equation}
-Finally we can use the neural network to get samples in data space
+Finally we can use the neural network to get samples in data space:
 \begin{equation}%
 	\label{eq:aa_to_data}
-	\mathbf{x}_i = \mathrm{INN}^{-1} (\mathbf{t}_i)
+	\mathbf{x}_i = \mathrm{INN}^{-1} (\mathbf{t}_i)\;.
 \end{equation}
 
-Additional modifications can be applied: We can add gaussian noise to the
+Additional modifications can be applied: We can add Gaussian noise to the
 samples in any of the latent spaces to get more variation or more extreme
 samples. Another idea is to change the constraint on the coefficients to be
-quadratic, but initial tests have proven unsuccessful so this approch was not
+quadratic, but initial tests have proven unsuccessful so this approach was not
 investigated further.
 
 Another modification is to add a random sample to $\mathbf{t}_i$ from the
 nullspace of the mapping to the archetype space to mitigate the loss of
-information that occures. Ignoring the additional softmax activation the
+information that occurs. Ignoring the additional softmax activation the
 mapping of the data onto archetype coefficients is linear. If $M_A$ is the
-matrix of the weights of this linear network layer, the mapping can be
+matrix of the weights of this linear network layer, then the mapping can be
 described as
 \begin{equation}%
 	\label{eq:aa_mapping}
-	\mathbf{a}_i = M_A \mathbf{t}_i
+	\mathbf{a}_i = M_A \mathbf{t}_i\;,
 \end{equation}
-where $\mathbf{a}_i$ are the resulting archetype coefficients for data vector
+where $\mathbf{a}_i$ are the resulting archetype coefficients for the data vector
 $\mathbf{t}_i$. Mapping archetype coefficients back into the latent space of
 the network can then be thought of as solving this linear equation for
 $\mathbf{t}_i$. However, in general a solution $\mathbf{t}'_i$ to this linear
@@ -187,7 +190,7 @@ equation is not unique and
 	\mathbf{t}''_i = \mathbf{t}'_i + \mathbf{k}
 \end{equation}
 is another solution to the equation. Here, $\mathbf{k}$ is a vector from the
-kernel or nullspace of $M_A$, the space of all vectors that are solutions to
+kernel or nullspace of $M_A$, i.e. the space of all vectors that are solutions to
 $M_A \mathbf{x} = \mathbf{0}$. All solutions to \autoref{eq:aa_mapping} are
 given by
 \begin{equation}%
@@ -219,7 +222,7 @@ on other outlier data. The availability of other outlier data that resembles
 the inlier data is one of the reasons we chose EMNIST as one of our datasets,
 as discussed in \autoref{sec:datasets}.
 
-The architecture of the discriminator neural network modeled after the
+The architecture of the discriminator neural network is modeled after the
 DCGAN architecture~\citep{radfordUnsupervisedRepresentationLearning2016} with
 additional inputs to make the discriminator class
 conditional~\citep{mirzaConditionalGenerativeAdversarial2014}. In detail, the
@@ -228,15 +231,17 @@ with leaky rectified linear unit activations that process the image input and
 the condition respectively. The outputs of these two networks are concatenated
 and fed into two convolutional layers with leaky rectified linear unit
 activations and batch
-normalization~\citep{ioffeBatchNormalizationAccelerating2015}. Finally a last
+normalization~\citep{ioffeBatchNormalizationAccelerating2015}. Finally, a last
 convolutional layer with the sigmoid function as activation is applied.
-For samples from the data distribution $x \sim p_{\mathrm{in}}$ with class
-labels $y$ and some outlier outlier distribution (e.g. from using the change of variables formula
-for an outlier distribution of a normalizing flow) $z \sim p_{\mathrm{out}}$
+For samples from the data distribution $\mathbf{x} \sim p_{\mathrm{in}}$ with class
+labels $y$ and some outlier distribution (e.g. from using the change of variables formula
+for an outlier distribution of a normalizing flow) $\mathbf{z} \sim p_{\mathrm{out}}$
 the discriminator $D$ is trained to maximize
 \begin{equation}
-	\mathbb{E}_{\hat{x}, \hat{y} \sim p_{\mathrm{in}}} \log D(x, y) +
-	\mathbb{E}_{z \sim p_{\mathrm{out}}} \log ( 1 - D(z, y) )
+	\mathbb{E}_{\hat{\mathbf{x}}, \hat{y} \sim p_{\mathrm{in}}}
+        \log D(\mathbf{x}, y) +
+	\mathbb{E}_{\mathbf{z} \sim p_{\mathrm{out}}} \log ( 1 - D(\mathbf{z},
+        y) )\;,
 \end{equation}
 where the class labels for the outliers are sampled from a uniform distribution
 over all class labels.
@@ -309,12 +314,15 @@ of outlier generation and train the classifier similarly to the classifier
 update step of Lee et al. The classifier shows low confidence when the
 distribution over class labels is close to a uniform distribution. We can
 compute the Kullback-Leibler divergence to get a measure for how close these
-two distributions are.  For samples from the data distribution $x \sim
-	p_{\mathrm{in}}$ with class labels $y$ and some outlier outlier distribution $z
+two distributions are.  For samples from the data distribution $\mathbf{x} \sim
+	p_{\mathrm{in}}$ with class labels $y$ and some outlier
+        distribution $\mathbf{z}
 	\sim p_{\mathrm{out}}$ the classifier is trained to maximize
 \begin{equation}
-	\mathbb{E}_{\hat{x}, \hat{y} \sim p_{\mathrm{in}}} \log p(y=\hat{y} | \hat{x}) -
-	\beta \mathbb{E}_{z \sim p_{\mathrm{out}}} \mathrm{KL}(\mathcal{U}(y) | p(y | z))
+	\mathbb{E}_{\hat{\mathbf{x}}, \hat{y} \sim p_{\mathrm{in}}} \log
+        p(y=\hat{y} | \hat{\mathbf{x}}) -
+	\beta \mathbb{E}_{\mathbf{z} \sim p_{\mathrm{out}}}
+        \mathrm{KL}(\mathcal{U}(y) | p(y | \mathbf{z}))\;,
 \end{equation}
 where $\beta$ is a hyperparameter that weights the two loss terms. Except for
 the toy example we use a VGG11 model as the classification
@@ -326,15 +334,15 @@ network~\citep{simonyanVeryDeepConvolutional2015}.
 \begin{figure}[htpb]
 	\begin{center}
 		\begin{tikzpicture}[scale=1, transform shape]
-			\node[varnode] (x) {$x$};
+			\node[varnode] (x) {$\mathbf{x}$};
 			\node[opnode] (inn) [right=of x] {INN};
-			\node[varnode] (t) [right=of inn] {$t$};
+			\node[varnode] (t) [right=of inn] {$\mathbf{t}$};
 
 			\node[opnode] (fa) at ($ (t) + (2cm,1cm) $) {$f_A$};
 			\node[opnode] (fb) at ($ (t) + (2cm,-1cm) $) {$f_B$};
 
-			\node[varnode] (A) [right=of fa] {$A$};
-			\node[varnode] (B) [right=of fb] {$B$};
+			\node[varnode] (A) [right=of fa] {$\mathbf{A}$};
+			\node[varnode] (B) [right=of fb] {$\mathbf{B}$};
 
 			\draw[grapharrow] (x)   -- (inn);
 			\draw[grapharrow] (inn)   -- (t);
@@ -352,13 +360,13 @@ network~\citep{simonyanVeryDeepConvolutional2015}.
 \begin{figure}[htpb]
 	\begin{center}
 		\begin{tikzpicture}[scale=1, transform shape]
-			\node[varnode] (x) {$x$};
+			\node[varnode] (x) {$\mathbf{x}$};
 			\node[opnode] (inn) [right=of x] {INN};
-			\node[varnode] (t) [right=of inn] {$t$};
+			\node[varnode] (t) [right=of inn] {$\mathbf{t}$};
 
 			\node[opnode] (fc) [right=of t] {$f_C$};
 
-			\node[varnode] (ta) [right=of fc] {$t'$};
+			\node[varnode] (ta) [right=of fc] {$\mathbf{t}'$};
 
 			\draw[grapharrow] (ta)   -- (fc);
 			\draw[grapharrow] (fc)   -- (t);
@@ -447,7 +455,7 @@ coupling layers downsampling is applied. The actual configuration of these
 components is specific to the experiments and mentioned in the respective
 subsections.
 
-As described in \autoref{sub:normalizing_flows} the network is train to
+As described in \autoref{sub:normalizing_flows} the network is trained to
 minimize the negative log-likelihood of the training data.
 
 To map from the latent space to the archetype coefficient $a_{ij}$ and $b_{ji}$
