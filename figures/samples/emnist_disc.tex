@@ -1,0 +1,20 @@
+\begin{tabular}{lrrrrrr}
+\toprule
+{outliers} & \multicolumn{2}{c}{letters} & \multicolumn{2}{c}{fashion} & \multicolumn{2}{c}{kmnist} \\
+{metric} & {AUC} & {AP} & {AUC} & {AP} & {AUC} & {AP} \\
+\midrule
+DeepAA, p = 0.1 & 0.64 & 0.33 & 0.88 & 0.77 & 0.67 & 0.47 \\
+DeepAA, p = 0.3 & 0.57 & 0.27 & 0.52 & 0.37 & 0.46 & 0.34 \\
+DeepAA, p = 0.5 & 0.48 & 0.22 & 0.38 & 0.31 & 0.42 & 0.33 \\
+DeepAA, p = 0.6 & 0.47 & 0.22 & 0.39 & 0.32 & 0.37 & 0.31 \\
+DeepAA, p = 0.8 & 0.43 & 0.20 & 0.48 & 0.35 & 0.39 & 0.32 \\
+DeepAA, p = 1.2 & 0.45 & 0.21 & 0.74 & 0.51 & 0.63 & 0.42 \\
+INN, Gumbel, p = 2.5 & 0.68 & 0.35 & 0.45 & 0.34 & 0.47 & 0.35 \\
+INN, Normal, p = 1.5 & 0.58 & 0.27 & 0.12 & 0.25 & 0.38 & 0.32 \\
+INN, Normal, p = 2.0 & 0.65 & 0.32 & 0.20 & 0.27 & 0.48 & 0.35 \\
+INN, Normal, p = 2.5 & 0.69 & 0.39 & 0.80 & 0.61 & 0.72 & 0.50 \\
+INN, Normal, p = 3.0 & 0.52 & 0.24 & 0.42 & 0.33 & 0.15 & 0.25 \\
+fashion & 0.73 & 0.44 & \bfseries 1.00 & \bfseries 1.00 & \bfseries 0.97 & \bfseries 0.95 \\
+letters & \bfseries 0.81 & \bfseries 0.56 & 0.50 & 0.36 & 0.48 & 0.35 \\
+\bottomrule
+\end{tabular}
