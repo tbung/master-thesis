@@ -1,6 +1,57 @@
 \chapter{Discussion and Outlook}%
 \label{cha:discussion}
 
+Outliers and outlier detection have been an important topic in statistics for
+centuries~\citep{zimekThereBackAgain2018}. Especially in recent years work has
+been done to develop and use generative models to improve the performance of
+classifiers on outlier
+data~\citep{meinkeNeuralNetworksThat2019,schottFirstAdversariallyRobust2018,leeTrainingConfidencecalibratedClassifiers2018}.
+In this work we introduced normalizing flows for this task, with and without
+the addition of archetypal analysis.
+
+We first investigated sampling from an outlier distribution in the latent space
+of a normalizing flow on toy data. In \autoref{sec:toy_example} we see, that
+outlier data sampled around the normal distribution in latent space, e.g. by
+using a Gumbel distribution, encircles the data well when mapped back into data
+space. There, we also showed that using these samples we can train a classifier
+to give low confidence scores to outlier data while keeping up the
+classification performance.
+
+Moving on to image data we showed how samples drawn from a spherical shell of
+larger radius around the inlier data in latent space led to sensible images and
+outliers similar to inlier images. We were able to show this on both, the
+digits dataset as well as the people dataset in
+\autoref{sec:qualitative_comparison}. On the people dataset we also
+observed images from different classes being generated as outliers of other
+classes. This again confirmed that the latent space is arranged well for
+sampling from outlier distributions.
+
+Indeed, investigating the latent space more closely in
+\autoref{sec:analysis_of_the_latent_space} showed this too. Classes that are
+expected to be close to each other or even hardly distinguishable, such as
+\texttt{0} and \texttt{o}, are close to each other in latent space.
+
+Archetypal analysis used in conjunction with a normalizing flow has been shown
+to be not only an interesting way of structuring the latent space but also to
+exert more control over the kind of outlier that is generated. After showing
+that deep archetypal analysis can find meaningful extremes, such as the
+different emotional expressions in the people dataset, see
+\autoref{fig:ferg_aa_mse} and \autoref{fig:ferg_aa_closest}, we showed how
+generating new samples from archetypes creates inlier samples as well as new
+outliers with control over what visual features are extreme for the digits
+dataset as well as the people dataset, see \autoref{fig:aa_emnist} to
+\autoref{fig:aa_ferg_corners}. We further showed how sampling from the
+nullspace of the archetype mapping creates better reconstructions and more
+variation in generated images in \autoref{fig:aa_nullspace} and
+\autoref{fig:aa_nullspace_bias} while allowing a lower number of archetypes,
+which allows the archetypes to be more interpretable.
+
+Finally in \autoref{sec:discriminator_performance} we were able to show that
+using our methods of outlier generation can be used to train a cheaper
+discriminator model and also to create classifiers, that give less false
+high-confidence scores to outlier samples.
+
+% TODO: Conclusion
 
 \section{Future Work}%
 \label{sec:future_work}
