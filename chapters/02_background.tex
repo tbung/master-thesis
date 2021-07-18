@@ -150,8 +150,8 @@ network. This however comes at the cost of what transformations can be learned.
             \draw[grapharrow] (plus) -- (x2);
         \end{tikzpicture}
     \end{subfigure}
-\caption{Additive coupling block. Left: forward computation, right: inverse
-computation.}%
+    \caption{Additive coupling block. \textbf{Top}: forward computation,
+        \textbf{Bottom}: inverse computation.}%
 \label{fig:additive_coupling_block}
 \end{figure}
 
@@ -236,8 +236,8 @@ $s$ and $t$
         \end{tikzpicture}
     \end{subfigure}
 \end{center}
-\caption{Affine coupling block. Left: forward computation, right: inverse
-computation.}%
+    \caption{Affine coupling block. \textbf{Top}: forward computation,
+        \textbf{Bottom}: inverse computation.}%
 \label{fig:affine_coupling_block}
 \end{figure}
 
@@ -291,7 +291,10 @@ switch $\mathbf{x}_{I_1}$ and $\mathbf{x}_{I_2}$ between them.
     \draw[{Straight Barb}-{Straight Barb},line width=1mm] (6cm,2.5cm) -- (8cm,2.5cm);
 \end{tikzpicture}
 \end{center}
-\caption{IRevNet Downsampling, figure adapted from Gomez et al.~\citep{gomezReversibleResidualNetwork2017}}%
+\caption{IRevNet Downsampling, figure adapted from Gomez et
+al.~\citep{gomezReversibleResidualNetwork2017}. Images are split according to a
+checkerboard pattern in the spatial dimensions and rearranged along the channel
+dimension.}%
 \label{fig:downsampling}
 \end{figure}
 
@@ -319,7 +322,10 @@ of the network the split parts are concatenated back together.
 \begin{figure}[htpb]
     \centering
     \includegraphics{figures/toy_example/gaussian_mixture/grid_transformed.pdf}
-    \caption{Mapping between data and latent space}%
+    \caption{Mapping between data and latent space of a normalizing flow from a
+    mixture of three Gaussians to a single normal distribution. The
+transformation of grid lines is also shown in both directions. Figure adapted
+from Dinh et al.~\citep{dinhDensityEstimationUsing2017}}%
     \label{fig:normalizing_flow_mapping}
 \end{figure}
 

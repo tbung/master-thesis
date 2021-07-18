@@ -7,14 +7,20 @@
 
 \begin{figure}[htpb] \centering
         \includegraphics{figures/toy_example/gaussian_mixture/latent_mapping.pdf}
-	\caption{Gaussian mixture latent mapping}%
+        \caption{\textbf{Top}: Data space and latent space of the Gaussian
+        mixture toy dataset. \textbf{Bottom}: The red points are sampled from a
+    ring around the latent distribution in latent space and mapped back into
+data space with the normalizing flow.}%
 	\label{fig:latent_gmm}
 \end{figure}
 
 \begin{figure}[htpb]
 	\centering
         \includegraphics{figures/toy_example/moons/latent_mapping.pdf}
-	\caption{Moons latent mapping}%
+        \caption{\textbf{Top}: Data space and latent space of the Moons
+        toy dataset. \textbf{Bottom}: The red points are sampled from a
+    ring around the latent distribution in latent space and mapped back into
+data space with the normalizing flow.}%
 	\label{fig:latent_moons}
 \end{figure}
 
@@ -53,14 +59,22 @@ in the bottom left of \autoref{fig:latent_moons} for the moons dataset.
 \begin{figure}[htpb]
 	\centering
         \includegraphics{figures/toy_example/gaussian_mixture/classifier.pdf}
-	\caption{Gaussian mixture classifier performance}%
+        \caption{\textbf{Left}: Decision regions and confidence of a classifier trained on the
+            Gaussian mixture toy dataset. \textbf{Right}: Decision regions and
+            confidence of a classifier trained additionally with the
+        Kullback-Leibler divergence loss on outliers. In the confidence plots
+    higher brightness means higher confidence.}%
 	\label{fig:classifier_gmm}
 \end{figure}
 
 \begin{figure}[htpb]
 	\centering
         \includegraphics{figures/toy_example/moons/classifier.pdf}
-	\caption{Moons classifier performance}%
+        \caption{\textbf{Left}: Decision regions and confidence of a classifier trained on the
+            Moons toy dataset. \textbf{Right}: Decision regions and
+            confidence of a classifier trained additionally with the
+        Kullback-Leibler divergence loss on outliers. In the confidence plots
+    higher brightness means higher confidence.}%
 	\label{fig:classifier_moons}
 \end{figure}
 
@@ -245,9 +259,9 @@ from the dataset shown in \autoref{fig:emnist_aa_closest} and
 	\centering
 	\includegraphics[width=1\linewidth]{figures/samples/aa_emnist.pdf}
 	\caption{Samples drawn from a dirichlet distribution and mapped back to
-		the data space of the EMNIST dataset. On the left hand side the
+		the data space of the EMNIST dataset. On the \textbf{left} hand side the
 		probability density function of the latent samling distribution is
-		shown, on the right the resulting samples are shown. Each row
+		shown, on the \textbf{right} the resulting samples are shown. Each row
 		corresponds to one class.}%
 	\label{fig:aa_emnist}
 \end{figure}
@@ -269,10 +283,8 @@ from the dataset shown in \autoref{fig:emnist_aa_closest} and
 		\includegraphics[width=1\linewidth]{figures/samples/aa_emnist3.pdf}
 	\end{subfigure}
 	\caption{Samples drawn from a dirichlet distribution and mapped back to
-		the data space of the EMNIST dataset. On the left hand side the
-		probability density function of the latent samling distribution is
-		shown, on the right the resulting samples are shown. Each row
-		corresponds to one class. Top, mid and bottom show sampling
+		the data space of the EMNIST dataset. \textbf{Top},
+                \textbf{mid} and \textbf{bottom} show sampling
 		close to one archetype each.}%
 	\label{fig:aa_emnist_corners}
 \end{figure}
@@ -281,9 +293,9 @@ from the dataset shown in \autoref{fig:emnist_aa_closest} and
 	\centering
 	\includegraphics[width=1\linewidth]{figures/samples/aa_ferg.pdf}
 	\caption{Samples drawn from a dirichlet distribution and mapped back to
-		the data space of the FERG dataset. On the left hand side a
+		the data space of the FERG dataset. On the \textbf{left} hand side a
 		projection of the probability density function of the latent
-		sampling distribution is shown, on the right the resulting samples
+		sampling distribution is shown, on the \textbf{right} the resulting samples
 		are shown. Each row corresponds to one class.}%
 	\label{fig:aa_ferg}
 \end{figure}
@@ -306,10 +318,8 @@ from the dataset shown in \autoref{fig:emnist_aa_closest} and
 	\end{subfigure}
 
 	\caption{Samples drawn from a dirichlet distribution and mapped back to
-		the data space of the FERG dataset. On the left hand side a
-		projection of the probability density function of the latent
-		sampling distribution is shown, on the right the resulting samples
-		are shown. Each row corresponds to one class. Top, mid and bottom show
+		the data space of the FERG dataset. \textbf{Top}, \textbf{mid}
+                and \textbf{bottom} show
 		sampling close to one archetype each.}%
 	\label{fig:aa_ferg_corners}
 \end{figure}
@@ -333,8 +343,8 @@ the corners.
 	\centering
 		\includegraphics{figures/samples/aa_nullspace.pdf}
 	\caption{Samples from the center of the Dirichlet distribution and each
-		of the corners. Each column is one class. Top: Model without bias in
-		the mapping to archetype space. Bottom: Model with bias in the mapping to
+		of the corners. Each column is one class. \textbf{Top}: Model without bias in
+		the mapping to archetype space. \textbf{Bottom}: Model with bias in the mapping to
 		archetype space.}%
 	\label{fig:aa_nullspace}
 \end{figure}
@@ -342,8 +352,8 @@ the corners.
 	\centering
         \includegraphics{figures/samples/aa_nullspace_bias_y.pdf}
         \caption{Samples from the center of the Dirichlet distribution and each
-        of the corners. Each column is one class. Top: Model without bias in
-        the mapping to archetype space. Bottom: Model with bias in the mapping to
+        of the corners. Each column is one class. \textbf{Top}: Model without bias in
+        the mapping to archetype space. \textbf{Bottom}: Model with bias in the mapping to
         archetype space.}%
         \label{fig:aa_nullspace_bias}
 \end{figure}
@@ -514,7 +524,7 @@ except the classifier with no outlier loss at all.
 \begin{figure}[htpb]
     \centering
     \includegraphics{figures/samples/emnist_disc_curve.pdf}
-    \caption{ROC curves (left) and precision-recall curve (right) for
+    \caption{ROC curves (\textbf{left}) and precision-recall curve (\textbf{right}) for
     discriminators trained on different sources of outliers tested on different
     sources of outliers.}%
     \label{fig:emnist_stat_disc}
@@ -523,7 +533,7 @@ except the classifier with no outlier loss at all.
 \begin{figure}[htpb]
     \centering
     \includegraphics{figures/samples/emnist_class_curve.pdf}
-    \caption{ROC curves (left) and precision-recall curve (right) for
+    \caption{ROC curves (\textbf{left}) and precision-recall curve (\textbf{right}) for
     classifiers trained on different sources of outliers tested on different
     sources of outliers.}%
     \label{fig:emnist_stat_class}
@@ -550,7 +560,7 @@ except the classifier with no outlier loss at all.
 \begin{figure}[htpb]
     \centering
     \includegraphics{figures/samples/ferg_CIFAR10_curve_disc.pdf}
-    \caption{ROC curve (left) and precision-recall curve (right) for
+    \caption{ROC curve (\textbf{left}) and precision-recall curve (\textbf{right}) for
         discriminators trained on different sources of outliers tested on
         different sources of outliers.}% 
     \label{fig:ferg_stat_disc}
@@ -568,7 +578,7 @@ except the classifier with no outlier loss at all.
 \begin{figure}[htpb]
     \centering
     \includegraphics{figures/samples/ferg_CIFAR10_curve_class.pdf}
-    \caption{ROC curve (left) and precision-recall curve (right) for
+    \caption{ROC curve (\textbf{left}) and precision-recall curve (\textbf{right}) for
         classifiers trained on different sources of outliers tested on
         different sources of outliers.}% 
     \label{fig:ferg_stat_class}

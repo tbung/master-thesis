@@ -72,7 +72,8 @@ distribution, we can simply draw coordinates $x_i \sim \mathcal{N}(0,
 \begin{figure}[htpb]
 	\centering
 	\includegraphics{figures/samples/gumbel_uni.pdf}
-	\caption{Gumbel distribution}%
+	\caption{Comparison of a standard normal distribution in one dimension
+        with Gumbel distributions for sequences of length $100$ and $100000$.}%
 	\label{fig:gumbel_uni}
 \end{figure}
 
@@ -105,7 +106,9 @@ normal distribution in comparison.
         \includegraphics{figures/samples/gumbel_multi.pdf}
 	\caption{Comparison of the distribution of the length random vectors
 		from a multivariat normal distribution to the Gumbel distribution in
-		low and high dimensions.}%
+		low and high dimensions. Gumbel distributions are shifted so
+            the mean of the underlying normal distribution would be the mean of
+        the $\chi$ distribution.}%
 	\label{fig:gumbel_multi}
 \end{figure}
 
@@ -297,9 +300,7 @@ over all class labels.
 			\draw[grapharrow] (l9)   -- (out);
 		\end{tikzpicture}
 	\end{center}
-	\caption{Architecture of the invertible neural network. The number of
-		coupling blocks in each section is specific to the experiments and
-		mentioned there.}%
+	\caption{Architecture of the discriminator network.}%
 	\label{fig:disc_architecture}
 \end{figure}
 
@@ -440,9 +441,11 @@ network~\citep{simonyanVeryDeepConvolutional2015}.
 			\end{center}
 		\end{subfigure}
 	\end{center}
-	\caption{Architecture of the invertible neural network. The number of
+        \caption{\textbf{Left}: Architecture of the invertible neural network. The number of
 		coupling blocks in each section is specific to the experiments and
-		mentioned there.}%
+            mentioned there. \textbf{Right}: Coupling function of the
+        high-resolution coupling blocks. Low-resolution coupling blocks are
+    similar, but have one more downsampling in front of them.}%
 	\label{fig:inn_contents}
 \end{figure}
 
