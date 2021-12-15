@@ -3,8 +3,7 @@
 
 This chapter will give an overview of the theoretical background of the problem
 investigated in this thesis, as well as the methods used. We will first
-introduce the topic of outliers on an intuitive level and then try to highlight
-a more rigorous approach. We will move on to introduce neural network models
+introduce the topic of outliers. We will move on to introduce neural network models
 especially in their invertible variant and how specific training schemes are
 particularly useful for investigating outliers. Finally, we will introduce
 archetypal analysis as a general concept and also as an add-on to more
@@ -14,7 +13,7 @@ complicated models.
 \section{Outliers And Outlier Detection}%
 \label{sec:outliers_an_outlier_detection}
 
-Outliers are data points in a data set, that differ significantly from other
+Outliers are data points in a dataset, that differ significantly from other
 data points in the dataset in a way that makes them not indicative of other
 data from the same source. It is therefore necessary to determine what data
 points are outliers and how they should be handled in any task performed on the
@@ -22,7 +21,6 @@ dataset~\citep{europeanmathematicalsocietyOutlierEncyclopediaMathematics}.
 Especially for extreme data points that still somewhat resemble the rest of the
 dataset it can be difficult to decide whether or not they are an outlier and
 this decision might ultimately subjective~\citep{zimekThereBackAgain2018}.
-% TODO: Expand
 
 
 \section{Invertible Neural Networks}% Generative Models?
@@ -66,12 +64,12 @@ determinants the whole forward computation is invertible by composing the
 inverse layers in reverse order, i.e.
 \begin{equation}%
     \label{eq:neural_network_inv}
-    \mathcal{F}^{-1} = f_L^{-1} \circ \dots \circ f_2^{-1} \circ f_1^{-1}\;.
+    \mathcal{F}^{-1} = f_1^{-1} \circ f_2^{-1} \circ \dots \circ f_L^{-1}\;.
 \end{equation}
 
 Dinh et al.\ \citep{dinhNICENonlinearIndependent2015} describe a family of transformations
-called coupling layers, that can be used as components in a invertible neural
-network. In general, coupling layers are defined by Dinh et al. as follows
+called coupling layers, that can be used as components in an invertible neural
+network. In general, coupling layers are defined by Dinh et al.\ as follows
 
 \begin{definition}[General Coupling Layer]
     Let $\mathbf{x} \in \mathbb{R}^D$
@@ -94,7 +92,6 @@ network. In general, coupling layers are defined by Dinh et al. as follows
 Note that the choice of $m$ is not constrained to invertible functions but can
 be arbitrary.
 
-% TODO: Additive coupling layer, volume preserving %
 A simple choice for the coupling law would be an additive law
 ~\citep{dinhNICENonlinearIndependent2015, gomezReversibleResidualNetwork2017}.
 The coupling layer transformation then becomes
@@ -155,7 +152,6 @@ network. This however comes at the cost of what transformations can be learned.
 \label{fig:additive_coupling_block}
 \end{figure}
 
-% TODO: GLOW coupling blocks %
 A more versatile approach is to use affine coupling blocks, that allow for
 non-volume preserving transformations. The coupling layer transformation for
 the general affine coupling block introduced by Dinh et
@@ -170,7 +166,7 @@ al.~\citep{dinhDensityEstimationUsing2017} is
 \end{equation}
 where $s$ and $t$ are arbitrary functions that map $\mathbb{R}^{D-d}
 \rightarrow \mathbb{R}^d$ and stand for scale and translation respectively and
-$\odot$ is the Hadarmat or pointwise product.
+$\odot$ is the Hadarmard or element-wise product.
 This transformation is again easily invertible, regardless of the complexity of
 $s$ and $t$
 \begin{equation}
@@ -244,7 +240,6 @@ $s$ and $t$
 To ensure all inputs are used we need to use at least two coupling blocks and
 switch $\mathbf{x}_{I_1}$ and $\mathbf{x}_{I_2}$ between them.
 
-% TODO: IRevNetDownsampling and permute layers %
 \subsection{Downsampling}%
 \label{sub:downsampling}
 
@@ -305,11 +300,11 @@ a loss of information they are not bijective and cannot be used in an
 invertible neural network architecture, at least outside of coupling functions.
 To still be able to increase the field of vision of convolutions and decrease the
 amount of computations in subsequent layers different strategies can be used. Gomez
-et al. used a pixel shuffle operation, in which spatial dimensions are reduce and
+et al.\ used a pixel shuffle operation, in which spatial dimensions are reduce and
 shifted into channel dimensions as shown
 in~\autoref{fig:downsampling}~\citep{gomezReversibleResidualNetwork2017}. 
 
-A strategy to reduce the amount of computations done in deeper layers, data can
+As a strategy to reduce the amount of computations done in deeper layers, data can
 simply be split of. The part that is split of can than be trained to resemble
 noise while the other part continues through coupling layers. Towards the end
 of the network the split parts are concatenated back together.
@@ -318,7 +313,6 @@ of the network the split parts are concatenated back together.
 \subsection{Normalizing Flows}%
 \label{sub:normalizing_flows}
 
-% TODO: Figure latent space x -> z
 \begin{figure}[htpb]
     \centering
     \includegraphics{figures/toy_example/gaussian_mixture/grid_transformed.pdf}
@@ -340,7 +334,7 @@ variables formula.
 In more mathematical terms, consider vectors $\mathbf{z}_i \in \mathbb{R}^d$
 that are distributed according to a simple distribution $p_{\mathbf{z}}:
 \mathbb{R}^d \rightarrow \mathbb{R}$. Let $\mathcal{F}: \mathbb{R}^d
-\rightarrow \mathbb{R}^d$ be an invertible transformation (e.g. an invertible
+\rightarrow \mathbb{R}^d$ be an invertible transformation (e.g.\ an invertible
 neural network). The probability density function of a variable $\mathbf{x}_i =
 \mathcal{F} (\mathbf{z}_i)$ can then be computed according to the change of
 variables formula
@@ -348,7 +342,7 @@ variables formula
     \label{eq:change_of_variables}
     p_{\mathbf{x}}(\mathbf{x}_i) =
     p_{\mathbf{z}}(\mathcal{F}^{-1}(\mathbf{x}_i)) \lvert J_{\mathbf{x}}
-    \rvert^{-1}\;,
+    \rvert\;,
 \end{equation}
 where
 \begin{equation}%
@@ -360,16 +354,15 @@ $\mathcal{F}$ is defined as in~\autoref{eq:neural_network}, the Jacobian is
 simply
 \begin{equation}%
     \label{eq:jacobian_chain_rule}
-    J_{\mathbf{x}} = \prod \det \frac{\partial f_i^{-1} (\mathbf{x})}{\partial
-    \mathbf{x}}\;.
+    J_{\mathbf{x}} = \prod \det \frac{\partial f_i^{-1} (\mathbf{x'})}{\partial
+    \mathbf{x'}}\;.
 \end{equation}
 
 To train a neural network as a normalizing flow we can simply maximize the
 log-likelihood of data samples, or equivalently minimize the negative
 log-likelihood. If $p_{\mathbf{z}}$ is the standard normal
 distribution, the negative log-likelihood loss for a mini-batch of size $N$ can
-be simply calculated as
-% TODO: Check this again
+be simply calculated up to a constant as
 \begin{equation}%
     \label{eq:nll_loss}
     \mathrm{NLL} = \frac{1}{N} \sum_i \lVert \mathcal{F}^{-1} (\mathbf{x}_i)
@@ -380,8 +373,6 @@ be simply calculated as
 \section{Archetypal Analysis}%
 \label{sec:archetypal_analysis}
 
-% - classical AA
-% - deep AA
 A common way to represent data by template examples is by using prototypes,
 especially in machine learning. Prototypes are typical examples of their class,
 that ideally entail all properties of their class. An alternative way, first
@@ -426,23 +417,19 @@ error in the representation
         b_{ji} \mathbf{x}_i \rVert^2
     % \end{aligned}
 \end{equation}
-Cutler et al. propose an alternating least squares
-algorithm to solve this optimization~\citep{cutlerArchetypalAnalysis1994}.
-Bauckhage et al. introduced a more efficient algorithm based on
-sub-gradients~\citep{bauckhageArchetypalAnalysisAutoencoder2015}, which is also
-used in \textcolor{red}{FIGURE}. % TODO: do I need this?
-Keller et al. build on this framework by applying archetypal analysis to the
-latent space of a deep generative
-model~\citep{kellerLearningExtremalRepresentations2020}. In their paper they
-propose using a Deep Variational Information Bottelneck. Here we will use a
-normalizing flow instead. The normalizing flow maps data vector $\mathbf{x}_i
-\in \mathbb{R}^d$ to a latent vector $\mathbf{t}_i \in \mathbb{R}^d$ that is
-approximately normally distributed. Additional linear layers with softmax
-activations map the latent vectors to archetype coefficients. As there is no
-absolute frame of reference for the latent space coordinates, the $k$ archetype
-vectors are initialized to be the vertices of a $(k-1)$-simplex. The archetype
-vectors can be fixed when training the flow, or can be allowed to update to
-accomodate a pretrained flow. The full model will be discussed in the next
-chapter.
-
-% TODO: reformulate with A and B?
+Cutler et al. propose an alternating least squares algorithm to solve this
+optimization~\citep{cutlerArchetypalAnalysis1994}.  Bauckhage et al.\ introduced
+a more efficient algorithm based on
+sub-gradients~\citep{bauckhageArchetypalAnalysisAutoencoder2015}. Keller et al.
+build on this framework by applying archetypal analysis to the latent space of
+a deep generative model~\citep{kellerLearningExtremalRepresentations2020}. In
+their paper they propose using a Deep Variational Information Bottleneck. Here
+we will use a normalizing flow instead. The normalizing flow maps data vector
+$\mathbf{x}_i \in \mathbb{R}^d$ to a latent vector $\mathbf{t}_i \in
+\mathbb{R}^d$ that is approximately normally distributed. Additional linear
+layers with softmax activations map the latent vectors to archetype
+coefficients. As there is no absolute frame of reference for the latent space
+coordinates, the $k$ archetype vectors are initialized to be the vertices of a
+$(k-1)$-simplex. The archetype vectors can be fixed when training the flow, or
+can be allowed to update to accommodate a pretrained flow. The full model will
+be discussed in the next chapter.

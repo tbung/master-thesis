@@ -11,7 +11,7 @@ the addition of archetypal analysis.
 
 We first investigated sampling from an outlier distribution in the latent space
 of a normalizing flow on toy data. In \autoref{sec:toy_example} we see, that
-outlier data sampled around the normal distribution in latent space, e.g. by
+outlier data sampled around the normal distribution in latent space, e.g.\ by
 using a Gumbel distribution, encircles the data well when mapped back into data
 space. There, we also showed that using these samples we can train a classifier
 to give low confidence scores to outlier data while keeping up the
@@ -46,14 +46,27 @@ variation in generated images in \autoref{fig:aa_nullspace} and
 \autoref{fig:aa_nullspace_bias} while allowing a lower number of archetypes,
 which allows the archetypes to be more interpretable.
 
-Finally in \autoref{sec:discriminator_performance} we were able to show that
+Finally, in \autoref{sec:discriminator_performance} we were able to show that
 using our methods of outlier generation can be used to train a cheaper
 discriminator model and also to create classifiers, that give less false
 high-confidence scores to outlier samples.
 
-% TODO: Conclusion
+In conclusion, we were able to show that normalizing flows are able to generate
+outliers close to the in-distribution. These outliers can provide insights into
+what to expect when working with the data at hand and are also able to be used
+for subsequent tasks, such as training confidence-calibrated classifiers. We
+showed how archetypal analysis in conjunction with normalizing flows can
+provide even more insights by identifying meaningful latent space
+representations. From these representations both inliers and outliers can be
+generated and used in subsequent tasks.
 
 \section{Future Work}%
 \label{sec:future_work}
+
+In the future our methods should be investigated on even more complex data like
+higher resolution images. More direct comparisons to competing methods should
+also be implemented. Another interesting line of research is to try to get rid
+of the class conditioning and thereby create a fully unsupervised method of
+generating outliers.
 
 

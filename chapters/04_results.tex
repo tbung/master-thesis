@@ -33,8 +33,8 @@ consists of three additive coupling blocks, where the coupling
 functions are neural networks with five linear layers with rectified linear
 units as activation functions. As described in
 \autoref{sec:network_architecture}, it is trained to maximize the likelihood of
-the training data.
-% TODO: why additive
+the training data. Here, we use additive coupling blocks, as all our classes
+have the same volume so preserving the volume works well.
 
 Samples from the Gaussian mixture toy dataset and the learned latent space
 is shown in \autoref{fig:latent_gmm}. As we can see
@@ -45,7 +45,6 @@ For the moons toy dataset, samples and the learned latent space are shown in
 \autoref{fig:latent_moons}. Again, we observe a reasonable approximation
 of a standard normal distribution in the latent space.
 
-% TODO: gumbel params
 We can now take a look at the generation of outliers. Since the latent space is
 low-dimensional, we use the Gumbel distribution sampling as described in
 \autoref{sub:gumbel_distribution}. The sampled ring in
@@ -91,7 +90,7 @@ predicted class distribution. We can see in the bottom left of
 \autoref{fig:classifier_gmm} and
 \autoref{fig:classifier_moons}, that this classifier has high confidence
 everywhere except in a small boundary region between the classes. This is often
-undesired as this means outliers remain undetected and receive a oftentimes
+undesired as this means outliers remain undetected and receive an oftentimes
 wrong class prediction.
 
 This can be mitigated by augmenting the loss of the classifier as described in
@@ -128,8 +127,8 @@ top left of \autoref{fig:classifier_gmm} and \autoref{fig:classifier_moons}.
 	\label{fig:ferg_sample_sigma}
 \end{figure}
 
-After testing our methods on simple data we can now move on to more complex
-data. We now consider the EMNIST dataset as described in
+After testing our methods on simple data, we can now move on to more complex
+data. We now consider the digits dataset as described in
 \autoref{sec:datasets}. Again we first train the normalizing flow. In this case
 the flow consists of four high-resolution convolutional coupling blocks, four
 low-resolution convolutional coupling blocks and two linear coupling blocks.
@@ -156,14 +155,14 @@ and therefore do not make up the majority of the mass of the distribution.
 To consider more complex data, we can repeat this investigation on the people
 dataset introduced in \autoref{sec:datasets}. As described above, the dataset
 can be ordered by character or by emotion, we choose the character as the class
-here. The normalizing flow trained on FERG consists of four high-resolution
+here. The normalizing flow trained on the people dataset consists of four high-resolution
 convolutional coupling blocks followed by twelve low-resolution convolutional
 coupling blocks and twelve linear coupling blocks. It is trained for 1500
 epochs with a learning rate of $10^{-4}$ reduced by a factor of ten every 500
-epochs. Samples are again generated as in the case of the EMNIST dataset. We
+epochs. Samples are again generated as in the case of the digits dataset. We
 can inspect the samples with their variance coefficients in
 \autoref{fig:ferg_sample_sigma}. Apparently one has to sample
-much further from the origin in terms of the variance than in the EMNIST case,
+much further from the origin in terms of the variance than in the digits case,
 suggesting the data is more spread and is approximated worse by a normal
 distribution in latent space. We can again see different extreme images that
 are unordered, there is again no attention paid to creating meaningful
@@ -171,7 +170,6 @@ latent space axes and the sampling direction is random. An interesting effect
 to note is, that due to the conditional training different classes can be
 noticed to appear as outliers of other classes. We will investigate the
 position of classes in the latent space in the next section.
-% TODO: investigate gumbel sampling?
 
 \section{Archetypal Analysis}%
 \label{sec:archetypal_analysis}
@@ -187,9 +185,9 @@ the positions of the archetypes in latent space and the parameters of the
 linear mapping layers are trained. We then compute
 the mean squared error for the reconstruction of all samples in the training
 set. The mean squared error as a function of the number of archetypes for the
-EMNIST dataset can be seen in \autoref{fig:emnist_aa_mse}. A reasonable choice
+digits dataset can be seen in \autoref{fig:emnist_aa_mse}. A reasonable choice
 is 14 archetypes, achieving a good reconstruction error while still keeping the
-number of archetypes low. For the FERG dataset the mean squared error as a
+number of archetypes low. For the people dataset the mean squared error as a
 function of the number of archetypes can be seen in \autoref{fig:ferg_aa_mse},
 the ideal choice are seven archetypes. This is notable, because it lines up
 with the seven expressions present in the dataset. Indeed,
@@ -200,7 +198,7 @@ identified with the expressions.
 \begin{figure}[htpb]
 	\centering
 	\includegraphics{figures/samples/aa_mse_EMNIST.pdf}
-	\caption{Mean squared error when reconstructing the EMNIST training
+	\caption{Mean squared error when reconstructing the digits training
 		dataset as a function of the number of archetypes}%
 	\label{fig:emnist_aa_mse}
 \end{figure}
@@ -208,7 +206,7 @@ identified with the expressions.
 \begin{figure}[htpb]
 	\centering
 	\includegraphics{figures/samples/aa_mse_FERG.pdf}
-	\caption{Mean squared error when reconstructing the FERG training
+	\caption{Mean squared error when reconstructing the people training
 		dataset as a function of the number of archetypes}%
 	\label{fig:ferg_aa_mse}
 \end{figure}
@@ -222,7 +220,7 @@ class closest to the archetypes as in \autoref{fig:emnist_aa_closest}.
 \begin{figure}[htpb]
 	\centering
 	\includegraphics{figures/samples/archetypes_emnist.pdf}
-	\caption{The images from the EMNIST dataset closest to each of the
+	\caption{The images from the digits dataset closest to each of the
 		archetypes of the model with three and the model with 14 archetypes
 		respectively.}%
 	\label{fig:emnist_aa_closest}
@@ -231,27 +229,27 @@ class closest to the archetypes as in \autoref{fig:emnist_aa_closest}.
 \begin{figure}[htpb]
 	\centering
 	\includegraphics{figures/samples/archetypes_ferg_7.pdf}
-	\caption{The images from the FERG dataset closest to each of the
+	\caption{The images from the people dataset closest to each of the
 		archetypes of the model.}%
 	\label{fig:ferg_aa_closest}
 \end{figure}
 
 \autoref{fig:aa_emnist} depicts samples generated by sampling from a
 Dirichlet distribution and mapping those samples back into the data space of
-the EMNIST dataset. To identify extreme samples, or outliers, we can
+the digits dataset. To identify extreme samples, or outliers, we can
 change the shape parameters of the Dirichlet distribution to draw samples close
 to one of the archetypes. \autoref{fig:aa_emnist_corners} shows such samples as
 well as how the images are distorted in specific ways
 related to the archetype. This could allow, for example, to investigate what
 extreme points in the data may look like and obtain an intuition for outliers
 that could act as adversarial data points.
-The same experiment can be done with the model trained on the FERG dataset.
+The same experiment can be done with the model trained on the people dataset.
 
 Turning to \autoref{fig:aa_ferg} and \autoref{fig:aa_ferg_corners}, we
 are again able to generate in-distribution samples and also extreme samples,
 where the distorted features are again controlled by the archetypes via the
 shape parameters of the Dirichlet distribution. Notably, extreme samples
-generated are also more distorted then the samples closest to the archetypes
+generated are also more distorted than the samples closest to the archetypes
 from the dataset shown in \autoref{fig:emnist_aa_closest} and
 \autoref{fig:ferg_aa_closest}.
 
@@ -259,8 +257,8 @@ from the dataset shown in \autoref{fig:emnist_aa_closest} and
 	\centering
 	\includegraphics[width=1\linewidth]{figures/samples/aa_emnist.pdf}
 	\caption{Samples drawn from a dirichlet distribution and mapped back to
-		the data space of the EMNIST dataset. On the \textbf{left} hand side the
-		probability density function of the latent samling distribution is
+		the data space of the digits dataset. On the \textbf{left} hand side the
+		probability density function of the latent sampling distribution is
 		shown, on the \textbf{right} the resulting samples are shown. Each row
 		corresponds to one class.}%
 	\label{fig:aa_emnist}
@@ -283,7 +281,7 @@ from the dataset shown in \autoref{fig:emnist_aa_closest} and
 		\includegraphics[width=1\linewidth]{figures/samples/aa_emnist3.pdf}
 	\end{subfigure}
 	\caption{Samples drawn from a dirichlet distribution and mapped back to
-		the data space of the EMNIST dataset. \textbf{Top},
+		the data space of the digits dataset. \textbf{Top},
                 \textbf{mid} and \textbf{bottom} show sampling
 		close to one archetype each.}%
 	\label{fig:aa_emnist_corners}
@@ -293,7 +291,7 @@ from the dataset shown in \autoref{fig:emnist_aa_closest} and
 	\centering
 	\includegraphics[width=1\linewidth]{figures/samples/aa_ferg.pdf}
 	\caption{Samples drawn from a dirichlet distribution and mapped back to
-		the data space of the FERG dataset. On the \textbf{left} hand side a
+		the data space of the people dataset. On the \textbf{left} hand side a
 		projection of the probability density function of the latent
 		sampling distribution is shown, on the \textbf{right} the resulting samples
 		are shown. Each row corresponds to one class.}%
@@ -318,7 +316,7 @@ from the dataset shown in \autoref{fig:emnist_aa_closest} and
 	\end{subfigure}
 
 	\caption{Samples drawn from a dirichlet distribution and mapped back to
-		the data space of the FERG dataset. \textbf{Top}, \textbf{mid}
+		the data space of the people dataset. \textbf{Top}, \textbf{mid}
                 and \textbf{bottom} show
 		sampling close to one archetype each.}%
 	\label{fig:aa_ferg_corners}
@@ -327,16 +325,16 @@ from the dataset shown in \autoref{fig:emnist_aa_closest} and
 \subsection{Nullspace Sampling}%
 \label{sub:nullspace_sampling}
 
-For the EMNIST dataset, the number of archetypes needed to achieve a low
+For the digits dataset, the number of archetypes needed to achieve a low
 reconstruction error is surprisingly high. Another way to improve
 reconstructions, and thereby the quality of generated samples, is augmenting the
 samples with samples from the nullspace of the mapping to archetype space. This
 works especially well when using no bias in the mapping. A model with three
 archetypes and no bias thereby achieves a mean squared reconstruction error of
-$0.022$ on EMNIST, lower than any of the models achieved without augmentation
+$0.022$ on the digits dataset, lower than any of the models achieved without augmentation
 (see \autoref{fig:emnist_aa_mse}). A model with bias in the mapping can still
-achieve a mean squared error on EMNIST of $0.068$, which is an improvement
-equivalent to tripeling the number of archetypes. In \autoref{fig:aa_nullspace}
+achieve a mean squared error on the digits dataset of $0.068$, which is an improvement
+equivalent to tripling the number of archetypes. In \autoref{fig:aa_nullspace}
 we can see how this affects samples from the center of the simplex and each of
 the corners.
 \begin{figure}[htpb]
@@ -363,17 +361,17 @@ the corners.
 
 After investigating the models qualitatively, we will now look more closely
 into the latent space and how different samples and classes relate to each
-other. Our investigation begins with EMNIST.
+other. Our investigation begins with the digits dataset.
 
 To check our intuition, that classes that are similar to each other visually
 should be placed close to each other in latent space we can check cluster
 distances between classes. For that we compute the latent vectors of the data
-in question conditioned on each of the classes in EMNIST. To ease computation
+in question conditioned on each of the classes in the digits dataset. To ease computation
 and visualization we perform a linear discriminant analysis on each of the class
 pairs and project the data on the first two components of the linear
 discriminant analysis. Next, we compute the mean euclidean distance of 1000
 sample pairs from the two classes. The result is shown as a colored matrix in
-\autoref{fig:emnist_distance_matrix} for a comparison of EMNIST to itself and
+\autoref{fig:emnist_distance_matrix} for a comparison of the digits dataset to itself and
 in \autoref{fig:emnist_distance_matrix_letters} for a comparison to the letters
 dataset. As expected, classes that are visually similar are close together:
 Consider, for example, how the class \texttt{6} is close to class \texttt{0}
@@ -399,7 +397,7 @@ Similarly, \texttt{i} and \texttt{1}, and \texttt{p} and \texttt{8} or
 	\includegraphics{figures/samples/emnist_distance_matrix_EMNIST_lda.pdf}
 	\caption{Mean distance in LDA projection space between samples from the
 		conditioning class (y axis) and a test class (x axis). Classes and
-		samples are from the EMNIST dataset. Darker means closer
+		samples are from the digits dataset. Darker means closer
 		together.}%
 	\label{fig:emnist_distance_matrix}
 \end{figure}
@@ -409,20 +407,21 @@ Similarly, \texttt{i} and \texttt{1}, and \texttt{p} and \texttt{8} or
 	\includegraphics{figures/samples/emnist_distance_matrix_letters_lda.pdf}
 	\caption{Mean distance in LDA projection space between samples from the
 		conditioning class (y axis) and a test class (x axis). Samples
-		from the conditioning class are from the EMNIST dataset, test
+		from the conditioning class are from the digits dataset, test
 		samples are from the letters dataset. Darker means closer
 		together.}%
 	\label{fig:emnist_distance_matrix_letters}
 \end{figure}
 
-For the FERG dataset relations between classes are less intuitive than for the
-EMNIST dataset. Still, we can look at the distances of samples from test
+For the people dataset relations between classes are less intuitive than for the
+digits dataset. Still, we can look at the distances of samples from test
 classes to a conditioning class in \autoref{fig:ferg_distance_matrix}. Most
 notable here is, that although all images are somewhat similar since they are
 computer generated, the classes \texttt{jules} and \texttt{ray} are clustered
 close to all other classes.
-In contrast to EMNIST we do not have a dataset of close outliers for the FERG
-dataset. To still make some measurements with models trained on the FERG
+In contrast to the digits dataset we do not have a dataset of close outliers
+for the people
+dataset. To still make some measurements with models trained on the people
 dataset we use CIFAR10 as a source of outliers. The matrix of pairwise
 distances can be seen in \autoref{fig:ferg_distance_matrix_cifar}. It is again
 interesting to see, that different classes are closer or further away not to
@@ -433,7 +432,7 @@ specific other classes but to the dataset as a whole.
 	\includegraphics{figures/samples/ferg_distance_matrix_ferg_lda.pdf}
 	\caption{Mean distance in LDA projection space between samples from the
 		conditioning class (y axis) and a test class (x axis). Samples
-		are from the FERG dataset. Darker means closer together.}%
+		are from the people dataset. Darker means closer together.}%
 	\label{fig:ferg_distance_matrix}
 \end{figure}
 
@@ -442,7 +441,7 @@ specific other classes but to the dataset as a whole.
 	\includegraphics{figures/samples/ferg_distance_matrix_cifar_lda.pdf}
 	\caption{Mean distance in LDA projection space between samples from the
 		conditioning class (y axis) and a test class (x axis). Samples
-		from the conditioning class are from the FERG dataset, test
+		from the conditioning class are from the people dataset, test
 		samples are from the CIFAR10 dataset. Darker means closer
 		together.}%
 	\label{fig:ferg_distance_matrix_cifar}
@@ -451,22 +450,22 @@ specific other classes but to the dataset as a whole.
 Since our method of sampling outliers relies on sampling on a shell around the
 inlier distribution as a whole and not the position of specific types of
 outliers, we will now look at the distribution of the lengths of latent
-vectors. For EMNIST, the distribution of latent vector lengths of inlier data
+vectors. For the digits dataset, the distribution of latent vector lengths of inlier data
 and from the outlier datasets letters, FashionMNIST and KMNIST are shown in
 \autoref{fig:emnist_radius_hist}. We can see that the letters dataset is close
-to the EMNIST dataset and even has some overlap, while the other two datasets
+to the digits dataset and even has some overlap, while the other two datasets
 are further away. To show where the overlap might come from we again look at
 the distribution of latent vector lengths in
 \autoref{fig:emnist_radius_hist_xo} but constrain the data to the classes
 \texttt{o} and \texttt{x}. Following our intuition the letters class \texttt{o}
-has a similar latent vector length distribution as the EMNIST class \texttt{0}
+has a similar latent vector length distribution as the digits class \texttt{0}
 while \texttt{x} is more clearly an outlier class by our measure.
 
 \begin{figure}[htpb]
 	\centering
 	\includegraphics{figures/samples/emnist_radius_hist.pdf}
-	\caption{Distribution of the length of latent space vectors for EMNIST
-		and its outlier datasets.}%
+	\caption{Distribution of the length of latent space vectors for the
+            digits dataset and its outlier datasets.}%
 	\label{fig:emnist_radius_hist}
 \end{figure}
 
@@ -479,7 +478,7 @@ while \texttt{x} is more clearly an outlier class by our measure.
 \end{figure}
 
 
-\section{Discriminator Performance}%
+\section{Discriminator and Classifier Performance}%
 \label{sec:discriminator_performance}
 
 To show a potential application of the outlier generation we train

@@ -5,22 +5,27 @@
 			width=60mm, minimum height=9mm}}
 \tikzset{title/.style={draw=none}}
 
-% TODO: PyTorch, FrEIA
-% TODO: Add some intro
+In this chapter we introduce our methods in more detail. In particular, we show
+how we sample outliers from our models, how these models are implemented and
+what datasets we use to evaluate our methods.
+
+All our experiments are implemented using the PyTorch
+library~\citep{paszkePyTorchImperativeStyle2019} and the \textit{Framework for
+Easily Invertible Architectures} \footnote{https://github.com/VLL-HD/FrEIA}
+developed by the Visual Learning Lab in Heidelberg.
 
 \section{Extremal Sampling}%
 \label{sec:extremal_sampling}
 
 Since our method relies on sampling outliers in the latent space we will now
 examine how this can be accomplished. The latent space is trained to be
-approximately gaussian in the case of the normalizing flow, so we can look at
-two methods of sampling outliers from a gaussian distribution. Sampling
+approximately Gaussian in the case of the normalizing flow, so we can look at
+two methods of sampling outliers from a Gaussian distribution. Sampling
 outliers in the Deep Archetypal Analysis case will be investigated in the next
 section.
 
 \subsection{High-Dimensional Gaussian Distributions}%
 \label{sub:high_dimensional_gaussian_distributions}
-% TODO: Proof?
 Since we are working with high-dimensional data, we can investigate the
 behavior of random vectors in high dimensions.
 Consider the vector $\mathbf{x} = (x_1, x_2, \dots, x_d)$ in $\mathbb{R}^d$, where the
@@ -44,7 +49,7 @@ If the coordinates are distributed with non-unit variance, $x_i \sim
 	\lVert \mathbf{x} \rVert_2 \sim \sigma\chi_d
 \end{equation}
 
-Assessing length of the random vector $\mathbf{x}$ via it's expectation value
+Assessing the length of the random vector $\mathbf{x}$ via it's expectation value
 \begin{equation}%
     \label{eq:mean_sq_dist}
     \mathbb{E} \lVert \mathbf{x} \rVert_2   & = \sqrt{2} \frac{\Gamma(\frac{d +
@@ -56,15 +61,13 @@ and variance
     \mathrm{Var} \lVert \mathbf{x} \rVert_2 & = d - (\mathbb{E}
     \lVert \mathbf{x} \rVert_2)^2\;,
 \end{equation}
-suggests that even though the area of highest probability for a high-dimensional
+\citep{forbesChiSquaredDistribution2010} suggests that even though the area of highest probability for a high-dimensional
 standard normal distribution is close to the origin, most of the mass will be
 in a thin, hyperspherical shell with radius $\sim \sqrt{d}$.
 
 If we want to sample from a shell around a high-dimensional standard normal
 distribution, we can simply draw coordinates $x_i \sim \mathcal{N}(0,
 	\sigma^2)$ and choose $\sigma$ such that a desired radius is reached.
-
-% TODO: Typicality
 
 \subsection{Gumbel Distribution}%
 \label{sub:gumbel_distribution}
@@ -81,7 +84,7 @@ Since the latent space is approximately standard normally distributed one way
 to approach sampling from outliers is extreme value theory --- the theory of
 the distribution of sequence maxima of independent, identically distributed
 (i.i.d.) random variables. Let $z_1, \dots, z_n$ be a sequence of i.i.d.
-standard normally distributed random variables, then the asymtotic distribution
+standard normally distributed random variables, then the asymptotic distribution
 of the maxima $M_n = \max (z_1, \dots, z_n)$ is
 \begin{equation}%
 	\label{eq:gumbel_distribution}
@@ -193,7 +196,7 @@ equation is not unique and
 	\mathbf{t}''_i = \mathbf{t}'_i + \mathbf{k}
 \end{equation}
 is another solution to the equation. Here, $\mathbf{k}$ is a vector from the
-kernel or nullspace of $M_A$, i.e. the space of all vectors that are solutions to
+kernel or nullspace of $M_A$, i.e.\ the space of all vectors that are solutions to
 $M_A \mathbf{x} = \mathbf{0}$. All solutions to \autoref{eq:aa_mapping} are
 given by
 \begin{equation}%
@@ -216,7 +219,7 @@ as if no softmax was applied
 where $\mathbf{w}$ is sampled from the latent space distribution of the
 normalizing flow.
 
-\section{Discriminator Training}%
+\section{Discriminator and Classifier Training}%
 \label{sec:discriminator_training}
 
 To investigate if our methods of generating outliers can be used in practice we
@@ -237,7 +240,7 @@ activations and batch
 normalization~\citep{ioffeBatchNormalizationAccelerating2015}. Finally, a last
 convolutional layer with the sigmoid function as activation is applied.
 For samples from the data distribution $\mathbf{x} \sim p_{\mathrm{in}}$ with class
-labels $y$ and some outlier distribution (e.g. from using the change of variables formula
+labels $y$ and some outlier distribution (e.g.\ from using the change of variables formula
 for an outlier distribution of a normalizing flow) $\mathbf{z} \sim p_{\mathrm{out}}$
 the discriminator $D$ is trained to maximize
 \begin{equation}
@@ -328,6 +331,9 @@ two distributions are.  For samples from the data distribution $\mathbf{x} \sim
 where $\beta$ is a hyperparameter that weights the two loss terms. Except for
 the toy example we use a VGG11 model as the classification
 network~\citep{simonyanVeryDeepConvolutional2015}.
+
+Both, the discriminator and the classifier network are trained using the ADAM
+optimizer~\citep{kingmaAdamMethodStochastic2017}.
 
 \section{Network Architecture}%
 \label{sec:network_architecture}
@@ -458,6 +464,12 @@ coupling layers downsampling is applied. The actual configuration of these
 components is specific to the experiments and mentioned in the respective
 subsections.
 
+For the coupling functions $s$ and $t$ we decided to follow the GLOW
+design~\citep{kingmaGlowGenerativeFlow2018} and use a single network to jointly
+compute the scaling and translation. Note, that in the low-resolution
+convolutional coupling blocks we use $1\times 1$ convolutions in every other
+block to improve image quality.
+
 As described in \autoref{sub:normalizing_flows} the network is trained to
 minimize the negative log-likelihood of the training data.
 
@@ -469,14 +481,13 @@ low dimensional space to the latent space of the normalizing flow. For this,
 the whole setup is trained to minimize the mean squared reconstruction error in
 addition to the optimization problem shown in \autoref{eq:archetype_rss}.
 
-% TODO: ADAM
-% TODO: GLOW design
-% TODO: every other low-res conv is 1x1
+All optimizations are done using the ADAM
+optimizer~\citep{kingmaAdamMethodStochastic2017}.
 
 \section{Datasets}%
 \label{sec:datasets}
 
-In the our experiments we use multiple different datasets. The first dataset is the
+In our experiments we use multiple different datasets. The first dataset is the
 EMNIST dataset~\citep{cohenEMNISTExtensionMNIST2017}, an extension to the MNIST
 dataset of handwritten digits~\citep{lecunGradientbasedLearningApplied1998}. It
 consists of greyscale images of handwritten digits and letters that are $28
@@ -484,7 +495,7 @@ consists of greyscale images of handwritten digits and letters that are $28
 across all datasets the images are zero-padded to a size of $32 \times 32$
 pixels. In the rest of the work, we will refer to the set of images of digits
 as the digits dataset and to the set of letters as the letters dataset.
-As an additonal source of outliers, we use the
+As an additional source of outliers, we use the
 Fashion-MNIST~\citep{xiaoFashionmnistNovelImage2017} and
 Kuzushiji-MNIST~\citep{clanuwatDeepLearningClassical2018} datasets, referred to
 as the fashion dataset and the KMNIST dataset in the rest of this work. The
@@ -506,8 +517,7 @@ split as well as the number of classes is listed in \autoref{tab:datasets}.
 
 \begin{table}[htpb]
 	\centering
-	\caption{caption}
+	\caption{Number of classes and samples in each dataset.}
 	\label{tab:datasets}
 	\input{figures/samples/datasets.tex}
 \end{table}
-% TODO: replace dataset names

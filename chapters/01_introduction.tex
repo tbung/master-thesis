@@ -1,2 +1,51 @@
 \chapter{Introduction}%
 \label{cha:introduction}
+Outliers and how to detect and handle them has been an important issue in
+statistics and now machine learning for a long
+time~\citep{zimekThereBackAgain2018}. Even the question of what constitutes an
+outlier when considering a specific dataset or task can be hard to answer,
+especially when potential outliers are similar to the data. 
+
+In recent years, work has been done to use deep neural networks to deal with
+outliers. Nalisnick et
+al.~\citep{nalisnickDetectingOutofDistributionInputs2019} propose a method of
+outlier detection using typicality, evaluating the empirical distribution of
+likelihoods from several deep generative models. Hein et
+al.~\citep{heinWhyReLUNetworks2019} show that classifier networks using
+rectified linear unit activations struggle with outliers as they yield
+high-confidence predictions even far away from the training data and try to
+mitigate this using an auxiliary loss term on outliers generated using
+Gaussian noise and filtering. Lee at
+al.~\citep{leeTrainingConfidencecalibratedClassifiers2018} propose training a
+classifier jointly with a generative adversarial network to reduce prediction
+confidence on outliers. Schott et
+al.~\citep{schottFirstAdversariallyRobust2018} estimate the data using a
+variational autoencoder network and perform classification by evaluating the
+class-conditional likelihoods of this generative model in such a way, that it
+converges to a uniform distribution over class labels for outliers. Meinke et
+al.~\citep{meinkeNeuralNetworksThat2019} obtain mathematical guarantees for low
+confidence predictions far away from the training data by training a classifier
+jointly with Gaussian mixture models as estimators for the in- and
+out-distribution density estimation, to again maximize the assigned
+class-probabilities on in-distribution data and to yield a uniform distribution
+over class-labels on out-distribution data.
+
+In this work we use a normalizing flow to model the density of in-distribution
+data and generate outliers from the latent space of the normalizing flow. In
+particular, we focus on outliers similar to in-distribution data, that might be
+hard to identify even for humans. These outliers can provide insight into what
+to expect and what outliers might be hardest to deal with. We show how more
+insight and control over the generated samples can be gained by using
+archetypal analysis to represent the latent space of the normalizing flow. We
+use the same methods to train a confidence-calibrated classifier similar to Lee
+et al.~\citep{leeTrainingConfidencecalibratedClassifiers2018}.
+
+In \autoref{cha:background} we introduce outliers, normalizing flows and
+archetypal analysis. Following that, we go into more detail of how we
+implemented our methods in \autoref{cha:methods}. In particular, we go over how
+we achieve outlier sampling from the latent space of the normalizing flow.
+Finally, we present the results of our experiments in \autoref{cha:results}.
+
+In summary, our contributions are a method of sampling outliers using
+normalizing flows and a method of gaining more insights and control over generated
+samples using archetypal analysis.
